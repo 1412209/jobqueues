@@ -28,10 +28,14 @@ class JobChain {
 			if (thisObj.jobChainNode && thisObj.jobChainNode.job){
 				var jobChainNode = thisObj.jobChainNode;
 				var job = jobChainNode.job;
+
+
 				// Lấy giá trị intervalTime
 				var intervalTime = 0;
+				if (job.slug == "Schedule")
+					intervalTime = 1 * 60 * 60 * 1000;
 				if (jobChainNode.options && jobChainNode.options.intervalSeconds)
-					intervalTime = jobChainNode.options.intervalSeconds * 1000;
+					intervalTime = Math.max(jobChainNode.options.intervalSeconds * 1000, intervalTime);
 				intervalTime = Math.max(minIntervalTime, intervalTime);
 				if (job.minIntervalTime)
 					intervalTime = Math.max(job.minIntervalTime, intervalTime);
@@ -43,6 +47,15 @@ class JobChain {
 				
 				if (jobChainNode.options && jobChainNode.options.schedule)
 					schedule = jobChainNode.options.schedule;
+
+				if (schedule.type == "repeat_hours"){
+					var hours = parseFloat(schedule.repeat_hours.hours);
+					intervalTime = Math.max(hours * 60 * 60 * 1000, intervalTime);
+					schedule = {
+						type: "repeat_seconds",
+						"repeat_seconds": { seconds: intervalTime / 1000 }
+					};
+				}
 				
 				if (schedule.repeat_seconds && schedule.repeat_seconds.seconds){
 					schedule.repeat_seconds.seconds = parseInt(schedule.repeat_seconds.seconds) * 1000;

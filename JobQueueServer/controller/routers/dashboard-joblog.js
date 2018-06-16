@@ -39,7 +39,11 @@ router.get("/json", (req, res, next) => {
 		for(var i = 0; i < length; i++){
 			var jobLog = jobLogs[i];
 			var date = jobLog.date;
-			date = ("00" + date.getDate()).slice(-2) + "/" + ("00" + (1+date.getMonth())).slice(-2) + "/" + ("0000" + (1900+date.getYear())).slice(-4)
+			date = ("00" + date.getDate()).slice(-2) 
+				+ "/" + ("00" + (1+date.getMonth())).slice(-2) 
+				+ "/" + ("0000" + (1900+date.getYear())).slice(-4)
+				+ " " + ("00" + date.getHours()).slice(-2)
+				+ ":" + ("00" + date.getMinutes()).slice(-2)
 			results.push({
 				ID: jobLog.ID,
 				name: jobLog.name,

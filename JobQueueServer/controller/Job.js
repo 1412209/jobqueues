@@ -97,7 +97,8 @@ class Job {
 					name: "Repeat type",
 					type: "select",
 					choices: {
-						"repeat_seconds": "Repeat in seconds",
+						// "repeat_seconds": "Repeat in seconds",
+						"repeat_hours": "Repeat in hours",
 						"repeat_daily": "Repeat daily",
 						"repeat_weekly": "Repeat weekly",
 						"repeat_monthly": "Repeat monthly",
@@ -105,23 +106,42 @@ class Job {
 						"one_time": "One Time"
 					}
 				},
+				// {
+				// 	field_name: "repeat_seconds",
+				// 	name: "Repeat in seconds",
+				// 	type: "group",
+				// 	fields: [
+				// 		{
+				// 			"field_name": "seconds",
+				// 			"name": "Seconds",
+				// 			"type": "number",
+				// 			value: 10,
+				// 			attributes: {
+				// 				min: 10
+				// 			}
+				// 		}
+				// 	],
+				// 	conditions: {
+				// 		"schedule.type": "repeat_seconds"
+				// 	}
+				// },
 				{
-					field_name: "repeat_seconds",
-					name: "Repeat in seconds",
+					field_name: "repeat_hours",
+					name: "Repeat in hours",
 					type: "group",
 					fields: [
 						{
-							"field_name": "seconds",
-							"name": "Seconds",
+							"field_name": "hours",
+							"name": "Hours",
 							"type": "number",
-							value: 10,
+							value: 1,
 							attributes: {
-								min: 10
+								min: 1
 							}
 						}
 					],
 					conditions: {
-						"schedule.type": "repeat_seconds"
+						"schedule.type": "repeat_hours"
 					}
 				},
 				{
