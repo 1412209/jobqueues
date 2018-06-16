@@ -201,6 +201,9 @@ class ScheduleOneTime extends IScheduleRepeat {
 
 		return date;
 	}
+	destroy() {
+		clearInterval(this.interval);
+	}
 }
 
 function getTime(timeString){
