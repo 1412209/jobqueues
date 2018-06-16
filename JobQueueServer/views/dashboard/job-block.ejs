@@ -1,0 +1,274 @@
+<% include template-parts/header %>
+<section class="page-title">
+	<div class="container">
+		<h1 class="title">Job Block</h1>
+	</div>
+</section>
+<!-- <section class="jobblock"> -->
+<section class="jobblock">
+	<div class="container">
+		<div class="row flex">
+			<div class="col-md-3 relative">
+				<div class="filters">
+					<h2 class="title-filters">Filters</h2>
+					<form class="search filter">
+						<div class="input-group">
+							<input type="text" class="form-control input" placeholder="Search...">
+							<div class="input-group-btn">
+								<button class="btn btn-default custum-btn" type="submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<div class="type filter">
+						<label for="">Type</label>
+						<select name="type" class="form-control input">
+							<option value="*">All</option>
+							<option value="trigger">Triggers</option>
+							<option value="action">Actions</option>
+							<option value="condition">Conditions</option>
+						</select>
+					</div>
+					<div class="category filter">
+						<label for="">Category</label>
+						<select name="job" class="form-control input">
+							<option value="*">All</option>
+							<% filter.categories.forEach(function(category){ %>
+							<option value="<%= category.slug %>"><%= category.name %></option>
+							<% })%>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div id="jobs-featured-container">
+					<h1 class="main-title">Featured</h1>
+					<p id="loading-featured" class="text-center" style="display: none;"><i class="fa fa-spin fa-spinner"></i> Please wait...</p>
+					<ul class="list-jobs" id="jobs-featured">
+						<!-- <li>
+							<div class="icon">
+								<img src="/job/icon/FacebookGetPhotos">
+							</div>
+							<div class="infos">
+								<h3 class="name">Facebook get photo</h3>
+								<div class="description">
+									Open Graph Test User - 109937179863491 Open Graph Test User - 109937179863491 Open Graph Test User - 109937179863491
+								</div>
+								<div class="moreinfos">
+									<div class="pull-left">
+										<div class="catInfo">
+											<i class="fa fa-folder" aria-hidden="true"></i> Facebook
+										</div>
+										<a class="account" href="#">
+											<i class="fa fa-user" aria-hidden="true"></i> 10
+										</a>
+									</div>
+									<div class="pull-right">
+										<a href="#"" class="viewmore">
+											viewmore <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+							<label for="checkbox" class="featured">
+								<input type="checkbox" id="checkbox" class="hidden checkbox">
+								<i class="checked fa fa-star" aria-hidden="true"></i>
+							</label>
+						</li> -->
+					</ul>
+				</div>
+				<div id="jobs-container">
+					<h1 class="main-title">Jobs Block</h1>
+					<p id="loading-jobs" class="text-center" style="display: none;"><i class="fa fa-spin fa-spinner"></i> Please wait...</p>
+					<ul class="list-jobs" id="jobs">
+						<!-- <li>
+							<div class="icon">
+								<img src="/job/icon/FacebookGetPhotos">
+							</div>
+							<div class="infos">
+								<h3 class="name">Facebook get photo</h3>
+								<div class="description">
+									Open Graph Test User - 109937179863491 Open Graph Test User - 109937179863491 Open Graph Test User - 109937179863491
+								</div>
+								<div class="moreinfos">
+									<div class="pull-left">
+										<div class="catInfo">
+											<i class="fa fa-folder" aria-hidden="true"></i> Facebook
+										</div>
+										<a class="account" href="#">
+											<i class="fa fa-user" aria-hidden="true"></i> 10
+										</a>
+									</div>
+									<div class="pull-right">
+										<a href="#"" class="viewmore">
+											viewmore <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+							<label for="checkbox" class="featured">
+								<input type="checkbox" id="checkbox" class="hidden checkbox">
+								<i class="checked fa fa-star" aria-hidden="true"></i>
+							</label>
+						</li> -->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			var $search = $("section.jobblock .filters .filter.search .input");
+			var $type = $("section.jobblock .filters .filter.type .input");
+			var $category = $("section.jobblock .filters .filter.category .input");
+			var $listJobsFeatured = $("section.jobblock #jobs-featured");
+			var $listJobs = $("section.jobblock #jobs");
+
+			loadJobs();
+			loadFeatured();
+
+			$("section.jobblock .filters .filter.search").submit(function(event) {
+				loadJobs();
+				loadFeatured();
+				return false;
+			});
+			$type.change(function(event) {
+				loadJobs();
+				loadFeatured();
+			});
+			$category.change(function(event) {
+				loadJobs();
+				loadFeatured();
+			});
+
+			function loadFeatured(search="", type="*", categorySlug="*"){
+				search = search ? search : $search.val();
+				type = type && type != "*" ? type : $type.val();
+				categorySlug = categorySlug && categorySlug != "*" ? categorySlug : $category.val();
+
+				var data = {};
+				data.search = search;
+				if (type != "*")
+					data.type = type;
+				if (categorySlug != "*")
+					data.categorySlug = categorySlug;
+
+				$("#loading-featured").show();
+				$listJobsFeatured.empty();
+				$.ajax({
+					url: '/dashboard/job-block/jobs-featured',
+					type: 'GET',
+					dataType: 'JSON',
+					data: data,
+					success: function(result){
+						if (!result || result.length <= 0) $("#jobs-featured-container").hide();
+						renderJobs($listJobsFeatured, result);
+					},
+					error: function(){
+
+					}
+				})
+				.always(function() {
+					$("#loading-featured").hide();
+				});
+			}
+
+			function loadJobs(search="", type="*", categorySlug="*"){
+				search = search ? search : $search.val();
+				type = type && type != "*" ? type : $type.val();
+				categorySlug = categorySlug && categorySlug != "*" ? categorySlug : $category.val();
+
+				var data = {};
+				data.search = search;
+				if (type != "*")
+					data.type = type;
+				if (categorySlug != "*")
+					data.categorySlug = categorySlug;
+
+				$("#loading-jobs").show();
+				$listJobs.empty();
+				$.ajax({
+					url: '/dashboard/job-block/jobs',
+					type: 'GET',
+					dataType: 'JSON',
+					data: data,
+					success: function(result){
+						renderJobs($listJobs, result);
+					},
+					error: function(){
+
+					}
+				})
+				.always(function() {
+					$("#loading-jobs").hide();
+				});
+			}
+
+			function renderJobs($list, jobsInfo){
+				jobsInfo = jobsInfo ? jobsInfo : [];
+				jobsInfo.forEach(function(jobInfo){
+					renderJob($list, jobInfo);
+				});
+			}
+
+			function renderJob($list, jobInfo){
+				var id = jobInfo.slug + "-" + Math.floor(Math.random() * 1000);
+				var htmlCategories = jobInfo.strCategories ? '<div class="catInfo"><i class="fa fa-folder" aria-hidden="true"></i> '+jobInfo.strCategories+'</div>' : "";
+				var htmlQuantityAccount = jobInfo.quantityAccount > 0 ? '<a class="account" href="'+jobInfo.accountLink+'"><i class="fa fa-user" aria-hidden="true"></i> '+jobInfo.quantityAccount+'</a>' : "";
+				var $element = $('<li>\
+						<div class="icon"><img src="'+jobInfo.icon+'"></div>\
+						<div class="infos">\
+							<h3 class="name">'+jobInfo.name+'</h3>\
+							<div class="description">\
+								'+jobInfo.excerpts+'\
+							</div>\
+							<div class="moreinfos">\
+								<div class="pull-left">\
+									'+htmlCategories+'\
+									'+htmlQuantityAccount+'\
+								</div>\
+								<div class="pull-right">\
+									<a href="#" class="viewmore">\
+										viewmore <i class="fa fa-angle-double-right" aria-hidden="true"></i>\
+									</a>\
+								</div>\
+							</div>\
+						</div>\
+						<label for="'+id+'" class="featured">\
+							<input type="checkbox" id="'+id+'" class="hidden checkbox" '+(jobInfo.featured==1?'checked':'')+'>\
+							<i class="checked fa fa-star" aria-hidden="true"></i>\
+						</label>\
+					</li>');
+				onChangeFeatured($element.find(".featured input"), jobInfo.jobSlug);
+
+				$list.append($element);
+			}
+			function onChangeFeatured($featured, jobSlug){
+				$featured.change(function(event) {
+					var featured = $(this).is(":checked") ? 1 : 0;
+					$.ajax({
+						url: '/dashboard/job-block/featured',
+						type: 'POST',
+						dataType: 'JSON',
+						data: {
+							jobSlug: jobSlug,
+							featured: featured
+						},
+						success: function(result){
+
+						},
+						error: function(){
+
+						}
+					})
+					.always(function() {
+						// loadFeatured();
+					});
+				});
+			}
+		});
+	</script>
+</select>
+
+<% include template-parts/footer %>

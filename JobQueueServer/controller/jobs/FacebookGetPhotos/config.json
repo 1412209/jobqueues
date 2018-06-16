@@ -1,0 +1,28 @@
+{
+    "type": "trigger",
+    "optionsAttributesName": [
+        "prefix",
+        "nexts"
+    ],
+    "outputAttributes": {
+        "next": [
+            {
+                "field_name": "imageUrl",
+                "name": "Image Url newest"
+            },
+            {
+                "field_name": "imageID",
+                "name": "Image ID"
+            }
+        ]
+    },
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "name": "Facebook Get Photo",
+    "excerpts": "Emit event when Facebook has new photo.",
+    "categoriesSlug": ["facebook"],
+    "hasAccount": true,
+    "minIntervalTime": 10000
+}

@@ -1,0 +1,416 @@
+<% include template-parts/header %>
+<section class="page-title">
+	<div class="container" style="display: flex; align-items: center;">
+		<h1 class="title" style="flex-grow: 1;">My Accounts</h1>
+		<a id="add-new-account" class="add-new" href="#">
+			<i class="fa fa-plus" aria-hidden="true"></i> Add new account
+		</a>
+	</div>
+</section>
+<section class="accounts">
+	<div class="container">
+		<div class="row flex">
+			<div class="col-md-3 relative">
+				<div class="filters">
+					<h2 class="title-filters">Filters</h2>
+					<form class="search filter">
+						<div class="input-group">
+							<input type="text" class="form-control input" placeholder="Search...">
+							<div class="input-group-btn">
+								<button class="btn btn-default custum-btn" type="submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<div class="category filter">
+						<label for="">Category</label>
+						<select name="job" class="form-control input">
+							<option value="*">All</option>
+							<% filter.categories.forEach(function(category){ %>
+							<option value="<%= category.slug %>"><%= category.name %></option>
+							<% })%>
+						</select>
+					</div>
+					<div class="job filter">
+						<label for="">Job Block</label>
+						<select name="job" class="form-control input">
+							<option value="*">All</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<h1 class="main-title">My Accounts</h1>
+				<p id="loading" class="text-center hidden"><i class="fa fa-spin fa-spinner"></i> Please wait...</p>
+				<ul class="list-accounts">
+					<!-- <li>
+						<div class="icon">
+							<img src="/job/icon/FacebookGetPhotos">&nbsp;&nbsp;<i class="fa fa-angle-double-right" aria-hidden="true"></i>
+						</div>
+						<div class="infos">
+							<div class="name">
+								<input class="input" value="Facebook Nguyễn Văn huy" onclick="this.select();"></input>
+								<i class="icon fa fa-pencil-square-o" aria-hidden="true"></i>
+							</div>
+							<p class="key">Open Graph Test User - 109937179863491</p>
+						</div>
+						<span class="delete text-danger"><i class="fa fa-times" aria-hidden="true"></i> Delete</span>
+					</li> -->
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			{
+				var $category = $("section.accounts .filters .filter.category .input");
+				var $job = $("section.accounts .filters .filter.job .input");
+				var $search = $("section.accounts .filters .filter.search .input");
+				var $listAccounts = $("section.accounts .list-accounts");
+
+
+				var urlString = window.location.href;
+				var url = new URL(urlString);
+				var search = url.searchParams.get("search");
+				search = (search) ? search : "";
+				var jobSlug = url.searchParams.get("jobSlug");
+				jobSlug = jobSlug ? jobSlug : "*";
+				var categorySlug = url.searchParams.get("categorySlug");
+				categorySlug = categorySlug ? categorySlug : "*";
+
+				function setSeach(search, urlString=null){
+					urlString = urlString ? urlString : window.location.href;
+					search = search ? search : "";
+					$search.val(search);
+					var url = new URL(urlString);
+					if (search == "")
+						url.searchParams.delete("search");
+					else url.searchParams.set("search", search);
+					return url.href;
+				}
+
+				function setJobSlug(jobSlug, urlString=null){
+					urlString = urlString ? urlString : window.location.href;
+					jobSlug = jobSlug ? jobSlug : "*";
+					$job.val(jobSlug);
+					var url = new URL(urlString);
+					if (jobSlug == "*")
+						url.searchParams.delete("jobSlug");
+					else url.searchParams.set("jobSlug", jobSlug);
+					return url.href;
+				}
+
+				function setCategorySlug(categorySlug, urlString=null){
+					urlString = urlString ? urlString : window.location.href;
+					categorySlug = categorySlug ? categorySlug : "*";
+					$category.val(categorySlug);
+					var url = new URL(urlString);
+					if (categorySlug == "*")
+						url.searchParams.delete("categorySlug");
+					else url.searchParams.set("categorySlug", categorySlug);
+					return url.href;
+				}
+
+				loadAccount(search, jobSlug, categorySlug);
+				loadJobBlock(jobSlug,categorySlug);
+				$category.change(function(event) {
+					loadAccount("", "*");
+					loadJobBlock();
+					clearSearch();
+				});
+				$job.change(function(event) {
+					loadAccount("");
+					// loadJobBlock();
+					clearSearch();
+				});
+				$("section.accounts .filters .filter.search").submit(function(event) {
+					loadAccount();
+					return false;
+				});
+				function loadAccount(search="", jobSlug=null, categorySlug=null){
+					categorySlug = categorySlug ? categorySlug : $category.val();
+					jobSlug = jobSlug ? jobSlug : $job.val();
+					search = search ? search : $search.val();
+
+					var urlString = setCategorySlug(categorySlug);
+					urlString = setJobSlug(jobSlug, urlString);
+					urlString = setSeach(search, urlString);
+					window.history.pushState("", "", urlString);
+
+					categorySlug = categorySlug != "*" ? categorySlug : null;
+					jobSlug = jobSlug != "*" ? jobSlug : null;
+
+					var data = {};
+					data.search = search;
+					if (categorySlug) data.categorySlug = categorySlug;
+					if (jobSlug) data.jobSlug = jobSlug;
+
+					$("#loading").show();
+					$listAccounts.empty();
+					$.ajax({
+						url: '/dashboard/my-accounts/accounts',
+						type: 'GET',
+						dataType: 'JSON',
+						data: data,
+						success: function(result){
+							if (!result || result.success != 1) return;
+							renderAccounts(result.data);
+						},
+						error: function(){
+
+						}
+					})
+					.always(function() {
+						$("#loading").hide();
+					});
+					
+				}
+				function loadJobBlock(jobSlug = "*", categorySlug=null){
+					categorySlug = categorySlug ? categorySlug : $category.val();
+					var data = {};
+					if (categorySlug != "*")
+						data.categorySlug = categorySlug;
+					$.ajax({
+						url: '/dashboard/my-accounts/jobs',
+						type: 'GET',
+						dataType: 'JSON',
+						data: data,
+						success: function(result){
+							if (!result || result.success != 1) return;
+							var jobs = result.data;
+							$job.empty();
+							$job.append($('<option>', {
+									value: "*",
+									text: "All"
+								}))
+							Object.keys(jobs).forEach(function(key){
+								$job.append($('<option>', {
+									value: key,
+									text: jobs[key]
+								}))
+							});
+							$job.val(jobSlug);
+						},
+						error: function(){
+
+						}
+					})
+				}
+				function clearSearch(){
+					$search.val();
+				}
+				function renderAccounts(accountsInfos){
+					accountsInfos = accountsInfos ? accountsInfos : [];
+					accountsInfos.forEach(function(accountInfos){
+						renderAccount(accountInfos);
+					}) 
+				}
+				function renderAccount(accountInfos){
+					var $element = $("<li></li>");
+					$element.append('<div class="icon">\
+								<img src="'+accountInfos.icon+'">&nbsp;&nbsp;<i class="fa fa-angle-double-right" aria-hidden="true"></i>\
+							</div>');
+					var $inputName = $('<input class="input" placeholder="Your account name" value="'+accountInfos.name+'" ></input>');
+					$inputName.focus(function(event) { this.select(); });
+					onChangeName($inputName, accountInfos.ID);
+					var $name = $('<div class="name"></div>').append($inputName).append(' <i class="icon fa fa-pencil-square-o" aria-hidden="true"></i>')
+					var $infos = $('<div class="infos"></div>').append($name).append('<p class="key">'+accountInfos.identity+'</p>')
+
+					var $delete = $('<span class="delete text-danger"><i class="fa fa-times" aria-hidden="true"></i> Delete</span>');
+					onDeleteAccount($delete, accountInfos.ID);
+
+					$element.append($infos).append($delete);
+					$listAccounts.append($element);
+				}
+				function onChangeName($input, accountID){
+					$input.change(function(event) {
+						var name = $input.val();
+						$.ajax({
+							url: '/dashboard/my-accounts/account/name',
+							type: 'PUT',
+							dataType: 'JSON',
+							data: {
+								name: name,
+								accountID: accountID
+							},
+							success: function(result){
+
+							},
+							error: function(){
+
+							}
+						})
+						.always(function() {
+							console.log("complete");
+						});
+						
+					});
+				}
+				function onDeleteAccount($button, accountID){
+					$button.click(function(event) {
+						bootbox.confirm({
+							message: "Do you want to delete this account?",
+							buttons: {
+								confirm: {
+									label: 'Delete',
+									className: 'btn-danger'
+								},
+								cancel: {
+									label: 'Cancel',
+									className: ''
+								}
+							},
+							callback: function (result) {
+								if (result)
+									$.ajax({
+										url: '/dashboard/my-accounts/account',
+										type: 'DELETE',
+										dataType: 'JSON',
+										data: {
+											accountID: accountID
+										},
+										success: function(result){
+											if (!result || result.success != 1)
+												return;
+											loadAccount();
+										},
+										error: function(){
+
+										}
+									})
+									.always(function() {
+										
+									});
+							}
+						});
+					});
+				}
+			}
+
+
+			/**********************************************************/
+			/********************* ADD NEW ACCOUNT ********************/
+			$("#add-new-account").click(function(event) {
+				$("#add-new-account-job").modal('show');
+				loadJobsAuth();
+			});
+			$("#add-new-account-job #category").change(function(event) {
+				loadJobsAuth();
+			});
+			function loadJobsAuth(){
+				var categorySlug = $("#add-new-account-job #category").val();
+				$("#add-new-account-job .loading").show();
+				$.ajax({
+					url: '/dashboard/my-accounts/jobs-of-add-acount',
+					type: 'GET',
+					dataType: 'JSON',
+					data: {categorySlug: categorySlug},
+					success: function(result){
+						if (!result || result.success != 1)
+							return fail();
+						var data = result.data ? result.data : [];
+						return success(data);
+					},
+					error: function(){
+						return fail();
+					}
+				})
+				function fail(){
+					$("#add-new-account-job").modal('hide');
+					bootbox.alert("Something went wrong");
+				}
+				function success(jobs){
+					$("#add-new-account-job .loading").hide();
+					var $jobsList = $("#add-new-account-job .jobs-list");
+					$jobsList.empty();
+					jobs.forEach(function(job){
+						$jobsList.append(getJobElement(job));
+					})
+				}
+				function getJobElement(jobInfo){
+					var element = $('<li>\
+							<div class="job-container">\
+								<img src="'+jobInfo.icon+'">\
+							</div>\
+							<h3 class="name">'+jobInfo.name+'</h3>\
+						</li>');
+					element.click(function(event) {
+						var href = jobInfo.authUrl;
+						var posx = 800;
+						var posy = 500;
+						signinWin = PopupCenter(href, "Sign In", 780, 410);
+						setTimeout(CheckLoginStatus, 2000);
+						signinWin.focus();
+						$("#add-new-account-job").modal('hide');
+						return false;
+					});
+					return element;
+				}
+			}
+
+
+			// Mở chứng thực ở page khác
+			var signinWin;
+			function PopupCenter(url, title, w, h) {
+				var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
+				var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY;
+
+				var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+				var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+				var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+				var top = ((height / 2) - (h / 2)) + dualScreenTop;
+				var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+				if (window.focus) {
+					newWindow.focus();
+				}
+				return newWindow;
+			}
+
+			function CheckLoginStatus() {
+				if (signinWin.closed) {
+					loadAccount();
+				}
+				else setTimeout(CheckLoginStatus, 1000);
+			}
+		});
+		
+	</script>
+	<div class="modal fade" id="add-new-account-job" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add account for Job</h4>
+				</div>
+				<div class="modal-body">
+					<div class="filters">
+						<div class="form-group">
+							<label for="category">Category:</label>
+							<select class="form-control" name="category" id="category">
+								<option value="">All</option>
+								<% filter.categories.forEach(function(category){ %>
+								<option value="<%= category.slug %>"><%= category.name %></option>
+								<% })%>
+							</select>
+						</div>
+					</div>
+					<div class="loading text-center" style="display: none;">
+						<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>
+					</div>
+					<ul class="jobs-list">
+
+					</ul>
+					<div id="message" class="alert hidden"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<% include template-parts/footer %>

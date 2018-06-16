@@ -1,0 +1,58 @@
+<% include template-parts/header %>
+<div class="page-login">
+	<div class="bg"></div>
+	<div class="box-login">
+			<!-- <div class="logo">
+				<img src="/images/logo.png">
+			</div> -->
+		<h1 class="title">SIGN IN</h1>
+		<form class="login-form" action="/login" method="post">
+			<% if (signin.message && signin.message != "") { %><div id="message" class="alert alert-danger"><%= signin.message %></div> <% } %>
+			<div class="input-group">
+				<i class="icon fa fa-user" aria-hidden="true"></i>
+				<input class="input" type="text" name="username" value="<%= signin.username %>" placeholder="Username" autocomplete="off">
+			</div>
+			<div class="input-group">
+				<i class="icon fa fa-lock" aria-hidden="true"></i>
+				<input class="input" type="password" name="password" placeholder="Password" autocomplete="off">
+			</div>
+			<div class="text-right"><input class="submit" type="submit" name="" value="Login"></div>
+		</form>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".login-form").validate({
+					rules: {
+						username: {
+							required: true
+						},
+						password: {
+							required: true
+						}
+					},
+					messages: {
+						username: {
+							required: "Please enter username.",
+						},
+						password: {
+							required: "Please enter password.",
+						}
+					}
+				});
+				$(".login-form .input").change(function(event) {
+					$(".login-form #message").addClass('hidden');
+				});
+			});
+		</script>
+		<div class="more-info">
+			<div class="text-right">
+				<a href="/signup">Sign Up</a> - <a href="#">Forget Password?</a>
+			</div>
+		</div>
+		<hr>
+		<div class="social-login">
+			<a class="item-social" href="/login/auth/fb"><img src="/images/fb-login.jpg"></a>
+			<a class="item-social" href="/login/auth/gg"><img src="/images/gg-login.jpg"></a>
+		</div>
+	</div>
+</div>
+<% include template-parts/footer %>

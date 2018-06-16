@@ -1,0 +1,235 @@
+<% include template-parts/header %>
+<section class="page-title">
+	<div class="container" style="display: flex; align-items: center;">
+		<h1 class="title" style="flex-grow: 1;">Dashboard</h1>
+		<a class="add-new" href="/dashboard/jobchain/editor">
+			<i class="fa fa-plus" aria-hidden="true"></i> Add new Job Chain
+		</a>
+	</div>
+</section>
+<section class="dashboard">
+	<div class="container">
+		<div class="box box-jobchain">
+			<div class="box-header">
+				<h2 class="title">New Job Chains</h2>
+			</div>
+			<div class="box-body">
+				<div id="loading-jobchain" class="loading text-center" style="display: none;">
+					<p><i class="fa fa-spin fa-spinner"></i> Please wait...</p>
+				</div>
+				<ul class="list-jobchain">
+					<!-- <li>
+						<div class="icon">
+							<img src="/job/icon/Schedule">&nbsp;&nbsp;<i class="fa fa-angle-double-right" aria-hidden="true"></i>
+						</div>
+						<div class="infos">
+							<a class="name" href="/dashboard/jobchain/editor/5aff079ba259f6219441ed81">
+								<h3 class="text">Name your Job Chain</h3>
+							</a>
+							<time><i class="fa fa-calendar-o" aria-hidden="true"></i> 12/12/2018</time>
+						</div>
+						<a class="edit text-info" href="/dashboard/jobchain/editor/5aff079ba259f6219441ed81"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+					</li> -->
+				</ul>
+				<div class="text-right">
+					<a class="viewmore" href="/dashboard/jobchain">Viewmore >></a>
+				</div>
+			</div>
+		</div>
+		<div class="box box-accounts">
+			<div class="box-header">
+				<h2 class="title">New Accounts</h2>
+			</div>
+			<div class="box-body">
+				<div id="loading-accounts" class="loading text-center" style="display: none;">
+					<p><i class="fa fa-spin fa-spinner"></i> Please wait...</p>
+				</div>
+				<ul class="list-accounts">
+					<!-- <li>
+						<div class="icon">
+							<img src="/job/icon/Schedule">&nbsp;&nbsp;<i class="fa fa-angle-double-right" aria-hidden="true"></i>
+						</div>
+						<div class="infos">
+							<a class="name" href="/dashboard/jobchain/editor/5aff079ba259f6219441ed81">
+								<h3 class="text">Name your Job Chain</h3>
+							</a>
+							<div class="identity">Nguyễn Huy - luanvan.vanhuy@gmail.com</div>
+							<time><i class="fa fa-calendar-o" aria-hidden="true"></i> 12/12/2018</time>
+						</div>
+					</li> -->
+				</ul>
+				<div class="text-right">
+					<a class="viewmore" href="/dashboard/my-accounts">Viewmore >></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="box box-joblogs">
+			<div class="box-header">
+				<h2 class="title">New Logs</h2>
+			</div>
+			<div class="box-body">
+				<div id="loading-joblogs" class="loading text-center" style="display: none;">
+					<p><i class="fa fa-spin fa-spinner"></i> Please wait...</p>
+				</div>
+				<ul class="list-joblogs">
+					<li class="error">
+						<strong><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> </strong> <strong>Job Chain</strong> - Deleted JobChain: 5b0192da0688f5190c2763f0
+					</li>
+					<li class="info">
+						<strong><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i> </strong> Job Chain - Deleted JobChain: 5b0192da0688f5190c2763f0
+					</li>
+					<li class="error">
+						<strong><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> </strong> Job Chain - Deleted JobChain: 5b0192da0688f5190c2763f0
+					</li>
+				</ul>
+				<div class="text-right">
+					<a class="viewmore" href="/dashboard/job-log">Viewmore >></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		{
+			var $jobChains = $(".list-jobchain");
+
+			loadJobChains();
+			function loadJobChains(){
+				var count = 5;
+				var skip = 0;
+
+				$("#loading-jobchain").show();
+				$jobChains.empty();
+				$.ajax({
+					url: '/api/jobchain',
+					type: 'GET',
+					dataType: 'JSON',
+					data: {
+						skip: skip,
+						count: count
+					},
+					// results { success, jobChainsInfo [{jobChainID, name, status, iconUrl, publicDate}] }
+					success: function(results){
+						if (!results.success) return;
+						$("#loading-jobchain").hide();
+						var jobChainsInfo = results.jobChainsInfo;
+						renderJobChains(jobChainsInfo);
+					}
+				})
+			}
+			function renderJobChains(jobChainsInfo){
+				jobChainsInfo.forEach(function(jobChainInfo){
+					renderJobChain(jobChainInfo);
+				})
+			}
+			function renderJobChain(jobChainInfo){
+				var nameRender = jobChainInfo.name ? jobChainInfo.name : "Name your Job Chain";
+				var $element = '<li>\
+						<div class="icon">\
+							<img src="'+jobChainInfo.iconUrl+'">&nbsp;&nbsp;<i class="fa fa-angle-double-right" aria-hidden="true"></i>\
+						</div>\
+						<div class="infos">\
+							<a class="name" href="/dashboard/jobchain/editor/'+jobChainInfo.jobChainID+'">\
+								<h3 class="text">'+nameRender+'</h3>\
+							</a>\
+							<time><i class="fa fa-calendar-o" aria-hidden="true"></i> '+jobChainInfo.publicDate+'</time>\
+						</div>\
+						<a class="edit text-info" href="/dashboard/jobchain/editor/'+jobChainInfo.jobChainID+'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>\
+					</li>';
+				$jobChains.append($element)
+			}
+		}
+		{
+			var $accounts = $(".list-accounts");
+
+			loadAccounts();
+			function loadAccounts(){
+				var limit = 5;
+				var skip = 0;
+
+				$("#loading-accounts").show();
+				$accounts.empty();
+				$.ajax({
+					url: '/dashboard/my-accounts/accounts',
+					type: 'GET',
+					dataType: 'JSON',
+					data: {
+						skip: skip,
+						limit: limit
+					},
+					// results { success, data [{ID, name, identity, publicDate, icon}] }
+					success: function(results){
+						if (!results.success) return;
+						$("#loading-accounts").hide();
+						var accounts = results.data;
+						renderAccounts(accounts);
+					}
+				})
+			}
+			function renderAccounts(accounts){
+				accounts.forEach(function(account){
+					renderAccount(account);
+				})
+			}
+			function renderAccount(account){
+				var $element = '<li>\
+						<div class="icon">\
+							<img src="'+account.icon+'">&nbsp;&nbsp;<i class="fa fa-angle-double-right" aria-hidden="true"></i>\
+						</div>\
+						<div class="infos">\
+							<a class="name" href="/dashboard/jobchain/editor/5aff079ba259f6219441ed81">\
+								<h3 class="text">'+account.name+'</h3>\
+							</a>\
+							<div class="identity">'+account.identity+'</div>\
+							<time><i class="fa fa-calendar-o" aria-hidden="true"></i> '+account.publicDate+'</time>\
+						</div>\
+					</li>';
+				$accounts.append($element)
+			}
+		}
+		{
+			var $joblogs = $(".list-joblogs");
+
+			loadAccounts();
+			function loadAccounts(){
+				var limit = 10;
+				var skip = 0;
+
+				$("#loading-joblogs").show();
+				$joblogs.empty();
+				$.ajax({
+					url: '/dashboard/job-log/json',
+					type: 'GET',
+					dataType: 'JSON',
+					data: {
+						skip: skip,
+						limit: limit
+					},
+					// results { success, data [{ID, name, info, type, date}] }
+					success: function(results){
+						if (!results.success) return;
+						$("#loading-joblogs").hide();
+						var joblogs = results.data;
+						renderJoblogs(joblogs);
+					}
+				})
+			}
+			function renderJoblogs(joblogs){
+				joblogs.forEach(function(joblog){
+					renderJoblog(joblog);
+				})
+			}
+			function renderJoblog(joblog){
+				var eClass = joblog.type == "info" ? "info" : (joblog.type == "error" ? "error" : "");
+				var iconClass = joblog.type == "info" ? "fa-info-circle" : (joblog.type == "error" ? "fa-exclamation-triangle" : "");
+				var $element = '<li class="'+eClass+'">\
+						<strong><i class="fa '+iconClass+' fa-fw" aria-hidden="true"></i> </strong> <strong>'+joblog.name+'</strong> - '+joblog.info+'\
+					</li>';
+				$joblogs.append($element)
+			}
+		}
+	});
+	</script>
+</section>
+<% include template-parts/footer %>

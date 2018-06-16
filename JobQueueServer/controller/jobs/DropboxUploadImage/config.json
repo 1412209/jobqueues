@@ -1,0 +1,55 @@
+{
+    "type": "action",
+    "optionsAttributesName": [
+        "prefix",
+        "nexts"
+    ],
+    "outputAttributes": {
+        "next": [
+            {
+                "field_name": "dui_filename",
+                "name": "File Name"
+            }
+        ]
+    },
+    "inputAttributes": [
+        {
+            "field_name": "fileUrl",
+            "name": "File upload Url (*)",
+            "type": "text",
+            "required": 1,
+            "class": "col-"
+        },
+        {
+            "field_name": "path",
+            "name": "Path file is save",
+            "type": "text",
+            "value": "/"
+        },
+        {
+            "field_name": "checkbox",
+            "name": "Path file is save",
+            "type": "checkbox"
+        },
+        {
+            "field_name": "select",
+            "name": "Path file is save",
+            "type": "select",
+            "choices": {
+                "name1": "Name 1",
+                "name2": "Name 2"
+            },
+            "conditions": {
+                "checkbox": 1
+            }
+        }
+    ],
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "name": "Dropbox Upload Image",
+    "excerpts": "Upload image by image url",
+    "categoriesSlug": ["dropbox"],
+    "hasAccount": true
+}

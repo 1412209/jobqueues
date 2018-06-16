@@ -1,0 +1,27 @@
+{
+    "type": "trigger",
+    "optionsAttributesName": [
+        "jobKey",
+        "prefix",
+        "nexts",
+        "dataFields"
+    ],
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "outputAttributes": {
+        "next": [
+            {
+                "field_name": "data",
+                "name": "Data"
+            }
+        ]
+    },
+    "inputAttributes": [],
+    "name": "WebHooks",
+    "excerpts": "Use to POST Request to execute execute Job Chain",
+    "categoriesSlug": [],
+    "hasAccount": false,
+    "minIntervalTime": 999999999999999
+}

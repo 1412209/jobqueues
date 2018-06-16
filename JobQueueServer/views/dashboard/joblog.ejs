@@ -1,0 +1,227 @@
+<% include template-parts/header %>
+<section class="page-title">
+	<div class="container">
+		<h1 class="title"><%= title %></h1>
+	</div>
+</section>
+<section class="joblog">
+	<div class="container">
+		<div class="row flex">
+			<div class="col-md-3 relative">
+				<div class="filters">
+					<h2 class="title-filters">Filters</h2>
+					<div class="type filter">
+						<label for="">Type</label>
+						<select name="type" class="form-control input">
+							<option value="*">All</option>
+							<option value="error" <%= type =="error" ? "selected" : ""%>>Errors</option>
+							<option value="info" <%= type =="info" ? "selected" : ""%>>Infomations</option>
+						</select>
+					</div>
+					<div class="datestart filter">
+						<label for="">Date Start</label>
+						<input type="datetime-local" class="form-control input">
+					</div>
+					<div class="dateend filter">
+						<label for="">Date End</label>
+						<input type="datetime-local" class="form-control input">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<h1 class="main-title">Featured</h1>
+				<div class="controls">
+					<div class="checkall"><input type="checkbox" name="checkall" id="checkall"> <label for="checkall">Select All</label></div>
+					<div class="actions">
+						<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Actions
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
+								<li role="presentation"><a role="menuitem" id="delete" tabindex="-1" href="#">Delete</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="joblog-list">
+					<!-- <div class="alert alert-info fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Info!</strong> Indicates a neutral informative change or action.
+					</div>
+
+					<div class="alert alert-danger fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+					</div> -->
+				</div>
+				<p id="loading" class="text-center" style="display: none;"><i class="fa fa-spin fa-spinner"></i> Please wait...</p>
+				<div class="text-center">
+					<button type="button" class="btn btn-info" id="viewmore" style="display: none;">Viewmore</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		var skip = 0;
+		var limit = 100;
+		var jobChainID = getJobChainID();
+		var $joblogList = $("section.joblog .joblog-list");
+
+		clearJobLogs();
+		loadJobLogs()
+
+		$("section.joblog .controls #checkall").change(function(event) {
+			if ($(this).is(":checked"))
+				$("section.joblog .joblog-list .check").prop('checked', true);
+			else $("section.joblog .joblog-list .check").prop('checked', false);
+		});
+		$(".actions #delete").click(function(event) {
+			var idsDelete = [];
+			$("section.joblog .joblog-list .check:checked").each(function(index, el) {
+				idsDelete.push($(this).data("id"));
+			});
+			deleteJobLog(idsDelete);
+			$(".actions .dropdown .dropdown-toggle").dropdown("toggle");
+			return false;
+		});
+
+		$("#viewmore").click(function(event) {
+			loadJobLogs();
+		});
+
+		$("section.joblog .type.filter .input").change(function(event) {
+			clearJobLogs();
+			loadJobLogs()
+		});
+
+		var timeoutDateChange = null;
+		$("section.joblog .filter .input[type='datetime-local']").change(function(event) {
+			if (timeoutDateChange) clearTimeout(timeoutDateChange);
+			timeoutDateChange = setTimeout(function(){
+				clearJobLogs();
+				loadJobLogs()
+			}, 1000);
+		});
+
+		function loadJobLogs(){
+			var type = $("section.joblog .type.filter .input").val();
+			var datestart = $("section.joblog .datestart.filter .input").val();
+			datestart = parseDate(datestart);
+			var dateend = $("section.joblog .dateend.filter .input").val();
+			dateend = parseDate(dateend);
+			var data = {
+				skip: skip,
+				limit: limit
+			};
+			if (jobChainID) data.jobChainID = jobChainID;
+			if (type && type != "*") data.type = type;
+			if (dateend) data.dateend = dateend;
+			if (datestart) data.datestart = datestart;
+			console.log(data);
+
+			$("#loading").show();
+			$("#viewmore").hide();
+			$.ajax({
+				url: '/dashboard/job-log/json',
+				type: 'GET',
+				dataType: 'JSON',
+				data: data,
+				success: function(result){
+					if (result.success == 0){
+						$("#viewmore").show();
+						return;
+					}
+					var jobLogs = result.data;
+					if (result.continue == 1)
+						$("#viewmore").show();
+					skip += jobLogs.length;
+					renderJobLogs($joblogList, jobLogs);
+				},
+				error: function(){
+
+				}
+			})
+			.always(function() {
+				$("#loading").hide();
+			});
+		}
+
+		function clearJobLogs(){
+			skip = 0;
+			$joblogList.empty();
+		}
+		function parseDate(strDate){
+			if (!strDate)
+				return null;
+			var year = strDate.slice(0, 4);
+			var month = strDate.slice(5, 7);
+			var day = strDate.slice(8, 10);
+			var hour = strDate.slice(11, 13);
+			var minute = strDate.slice(14, 16);
+			return {
+				year: parseInt(year),
+				month: parseInt(month),
+				day: parseInt(day),
+				hour: parseInt(hour),
+				minute: parseInt(minute)
+			}
+		}
+		function getJobChainID(){
+			return "<%= jobChainID %>";
+			// var urlString = window.location.href;
+			// var url = new URL(urlString);
+			// return url.searchParams.get("jobChainID");
+		}
+		function renderJobLogs($joblogList, jobLogs){
+			jobLogs.forEach(function(jobLog){
+				renderJobLog($joblogList, jobLog);
+			})
+		}
+		function renderJobLog($joblogList, jobLog){
+			var eClass = jobLog.type == "info" ? "alert-info" : (jobLog.type == "error" ? "alert-danger" : "");
+			var $element = $('<div class="alert '+eClass+' fade in">\
+					<input type="checkbox" class="check">\
+					<div class="infos"><strong>'+jobLog.name+':</strong> '+jobLog.info+'</div>\
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>\
+				</div>');
+			$element.find('.check').data("id", jobLog.ID);
+			$element.on('close.bs.alert', function () {
+				$.ajax({
+					url: '/dashboard/job-log/json',
+					type: 'DELETE',
+					dataType: 'JSON',
+					data: {ids:[jobLog.ID]},
+					success: function(err, result){
+
+					},
+					error: function(err, result){
+
+					}
+				});
+				skip --;
+			});
+			$joblogList.append($element);
+		}
+
+		function deleteJobLog(idsDelete){
+			$.ajax({
+				url: '/dashboard/job-log/json',
+				type: 'DELETE',
+				dataType: 'JSON',
+				data: {ids:idsDelete},
+				success: function(err, result){
+					console.log(result)
+					if (result == "success")
+						$("section.joblog .joblog-list .check:checked").parent().hide();
+				},
+				error: function(err, result){
+
+				}
+			});
+		}
+	});
+</script>
+
+<% include template-parts/footer %>

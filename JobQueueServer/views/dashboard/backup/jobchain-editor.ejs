@@ -1,0 +1,848 @@
+<% include template-parts/header %>
+<link rel="stylesheet" type="text/css" href="/editor-plugin/ui/trumbowyg.min.css">
+<link rel="stylesheet" type="text/css" href="/editor-plugin/plugins/colors/ui/trumbowyg.colors.min.css">
+<script type="text/javascript" src="/editor-plugin/trumbowyg.min.js"></script>
+<script type="text/javascript" src="/editor-plugin/plugins/colors/trumbowyg.colors.min.js"></script>
+<section class="page-title">
+	<div class="container" style="display: flex; align-items: center;">
+		<h1 class="title" style="flex-grow: 1;">Edit Job Chain</h1>
+		<div class="jobs_status text-right">
+			<span id="loading-status"><i class="fa fa-spin fa-spinner"></i></span>
+			<input type="checkbox" class="hidden input" <%= (content.status) ? "checked" : "" %> name="jobs_status" id="jobs_status">
+			<label for="jobs_status" class="jobs_status_button"></label>
+		</div>
+	</div>
+</section>
+<section class="jobstree">
+	<div class="container">
+		<div class="job-chain-name">
+			<i class="fa fa-pencil-square-o icon-edit" aria-hidden="true"></i>
+			<input type="text" onClick="this.select();" name="job_chain_name" value="<%=content.name%>" placeholder="Name your Job Chain"> <span class="loading hidden"><i class="fa fa-spin fa-spinner"></i></span>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div id="loading-jobstree" class="loading text-center">
+			<p><i class="fa fa-spin fa-spinner"></i> Please wait...</p>
+		</div>
+		<div id="jobstree"></div>
+	</div>
+
+	<div class="modal fade" id="choose-job" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Choose Job</h4>
+				</div>
+				<div class="modal-body">
+					<div class="filters">
+						<div class="form-group">
+							<label for="type">Type:</label>
+							<select class="form-control" name="type" id="type">
+								<option value="*">All</option>
+								<option value="source">Listening</option>
+								<option value="target">Event handling</option>
+								<option value="trigger">Triggers</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="category">Category:</label>
+							<select class="form-control" name="category" id="category">
+								<option value="*">Tất cả</option>
+								<% content.categories.forEach(function(category){ %>
+								<option value="<%= category.slug %>"><%= category.name %></option>
+								<% })%>
+							</select>
+						</div>
+					</div>
+					<div class="loading text-center">
+						<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>
+					</div>
+					<ul class="jobs-list">
+
+					</ul>
+					<div id="message" class="alert hidden"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="editor" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Configure Job</h4>
+				</div>
+				<div class="modal-body">
+					<div class="panel-group"  id="configure">
+						<div class="panel panel-default section options">
+							<a class="panel-heading" data-toggle="collapse" data-parent="#configure" href="#options"><h3 class="title"><i class="fa fa-cog" aria-hidden="true"></i> Options</h3></a>
+							<div id="options" class="panel-collapse collapse">
+								<div class="panel-container">
+									<div class="loaded input_group">
+										<div class="form-group">
+											<label for="prefix">Prefix</label>
+											<input type="text" class="form-control input" id="prefix" name="prefix">
+										</div>
+										<div class="form-group nexts-active">
+											<label for="prefix">The next jobs are displayed</label>
+											<div class="list-nexts">
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default section account">
+							<a class="panel-heading" data-toggle="collapse" data-parent="#configure" href="#account"><h3 class="title"><i class="fa fa-user" aria-hidden="true"></i> Account</h3></a>
+							<div id="account" class="panel-collapse collapse">
+								<div class="panel-container">
+									<div class="loaded content-container">
+										<ul class="list-account">
+										</ul>
+										<div class="text-left"><a href="12" class="btn btn-default auth-url">Connect an Account</a></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default section config template">
+							<a class="panel-heading" data-toggle="collapse" data-parent="#configure" href="#config"><h3 class="title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Inputs</h3></a>
+							<div id="config" class="panel-collapse collapse">
+								<div class="panel-container">
+									<ul style="padding-left: 15px;" class="loaded list-template">
+									</ul>
+									<hr>
+									<div id="inputs" class="input_group loaded">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="message" class="alert hidden"></div>
+				</div>
+				<div class="modal-footer">
+					<span id="loading-save" class="hidden"><i class="fa fa-spin fa-spinner"></i></span>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-success" id="submit">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="waiting" data-backdrop="static" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="loading text-center">
+						<p><i class="fa fa-spin fa-spinner"></i> Please Wait...</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</section>
+<script type="text/javascript" src="/js/input-type.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		/**************************************************************/
+		/*********************** Biến toàn cục ************************/
+		const jobChainID = "<%= content.jobChainID %>";
+		var nodeTree = null;
+		/*********************** Biến toàn cục ************************/
+		/**************************************************************/
+
+		/***********************************************************************/
+		/*********************** Chỉnh sửa tên JobChain ************************/
+		$(".job-chain-name [name='job_chain_name']").change(function(event) {
+			var jobChainName = $(this).val();
+			$(".job-chain-name .loading").removeClass('hidden');
+			$.ajax({
+				url: '/api/jobchain/name',
+				type: 'PUT',
+				dataType: 'JSON',
+				data: {
+					jobChainID: jobChainID,
+					jobChainName: jobChainName
+				},
+				success: function(result){
+					if (result.success)
+						$(".job-chain-name .loading").addClass('hidden');
+				}
+			});
+		});
+		/*********************** Chỉnh sửa tên JobChain ************************/
+		/***********************************************************************/
+
+		/**************************************************************/
+		/*********************** Start / Stop *************************/
+		$("#jobs_status").click(function(event) {
+			changeStatus.apply(this);
+		});
+		var jobChainToggle = false;
+		function changeStatus(){
+			if (jobChainToggle) return jobChainToggle = false;
+			var isChecked = $(this).is(":checked");
+			$(".jobs_status").addClass('disable');
+			$.ajax({
+				type: 'post',
+				url: "/api/jobchain/status",
+				dataType: 'json',
+				data: {
+					jobChainID: jobChainID,
+					turnOn: (isChecked) ? 1 : 0
+				},
+				success: function(data){
+					if (!data.success) {
+						alert("Error"); toggleJobChain();
+					}
+				},
+				error: function(){
+					alert("Error");
+					toggleJobChain();
+				}
+			})
+			.always(function(){
+				$(".jobs_status").removeClass('disable');
+			});
+		}
+		function toggleJobChain(){
+			jobChainToggle = true;
+			if ($("#jobs_status").is(":checked"))
+				stopJobChain();
+			else startJobChain();
+		}
+		function startJobChain(){
+			$("#jobs_status").prop('checked', true);
+			changeStatus.apply($("#jobs_status"));
+		}
+		function stopJobChain(){
+			$("#jobs_status").prop('checked', false);
+			changeStatus.apply($("#jobs_status"));
+		}
+		/*********************** Start / Stop *************************/
+		/**************************************************************/
+
+		/************************************************************************/
+		/************************ LỰA CHỌN CÔNG VIỆC ****************************/
+		// Sự kiện filter
+		$("#choose-job .filters #type, #choose-job .filters #category").change(function(event) {
+			$("#choose-job #message").addClass('hidden');
+			loadJobsByFilter();
+		});
+		// Hiển thị popup
+		function popupChooseJob(open=true){
+			if (open){
+				$("#choose-job").modal('show');
+				$("#choose-job #message").addClass('hidden');
+				loadJobsByFilter();
+			}
+			else $("#choose-job").modal('hide');
+		}
+		// Load công việc dựa vào filter
+		function loadJobsByFilter(){
+			$("#choose-job").addClass("is-loading");
+			var type = $("#choose-job .filters #type").val();
+			var category = $("#choose-job .filters #category").val();
+			var data = {}
+			if (type && type != "*") data['type'] = type;
+			if (category && category != "*") data['category'] = category;
+			$.ajax({
+				url: '/api/jobchain/jobs',
+				type: 'GET',
+				dataType: 'JSON',
+				data: data,
+				success: function(result) {
+					loadJobs(result);
+					reloadEventChooseJob()
+				},
+				error: function(xhr,status,error) {
+					console.log("error");
+				}
+			})
+			.always(function() {
+				$("#choose-job").removeClass("is-loading");
+			});
+		}
+		// Render danh sách công việc html
+		function loadJobs(jobsInfo){
+			var $jobList = $("#choose-job .jobs-list");
+			$jobList.html("");
+			jobsInfo.forEach(function(jobInfo){
+				var html = '<li data-job-slug="'+jobInfo.slug+'">\
+								<div class="job-container">\
+									<img src="'+jobInfo.icon+'">\
+								</div>\
+								<h3 class="name">'+jobInfo.name+'</h3>\
+							</li>';
+				$jobList.append(html);
+			});
+		}
+		// Cài đặt các sự kiện chọn công việc
+		function reloadEventChooseJob(){
+			$("#choose-job .jobs-list > li").click(function(event) {
+				var jobSlug = $(this).data("job-slug")
+				var nodeParentID = nodeParentID;
+				var jobChainID = $("section.jobstree").data("jobchain-id");
+				var node = getCacheNodeChooseJob();
+				addJobChainNode(node, jobSlug);
+			});
+		}
+		// Gửi reques đến server để thêm mới 1 công việc vào chuỗi công việc
+		function addJobChainNode(node, jobSlug){
+			// $("#choose-job").modal('hide');
+			// $("#waiting").modal('show');
+			$("#choose-job #message").addClass('hidden');
+			var nodeParent = nodeTree.findNodeParent(node);
+			var jobChainNodeParentID = nodeParent.infos.jobChainNodeID;
+			var isRoot = (nodeTree.isRoot(nodeParent)) ? 1 : 0;
+			var nextField = node.infos.nextField;
+			$.ajax({
+				url: '/api/jobchain/node/add',
+				type: 'POST',
+				dataType: 'JSON',
+				data: {
+					jobSlug: jobSlug,
+					jobChainID: jobChainID,
+					jobChainNodeParentID: jobChainNodeParentID,
+					nextField: nextField,
+					isRoot: isRoot
+				},
+				success: function(result){
+					if (!result.success){
+						$("#choose-job #message").addClass('alert-danger').removeClass('alert-success').removeClass('hidden');
+						$("#choose-job #message").text(result.message);
+						// $("#waiting").modal('hide');
+						// $("#choose-job").modal('show');
+						return;
+					}
+					popupChooseJob(false);
+					stopJobChain();
+					loadJobChain();
+				},
+				error: function(){
+					$("#waiting").modal('hidden');
+					$("#choose-job #message").addClass('alert-danger').removeClass('alert-success').removeClass('hidden');
+					$("#choose-job #message").text("Error. Please choose again.");
+					popupChooseJob(true);
+				}
+			})
+			// .always(function() {
+			// 	$("#waiting").modal('hide');
+			// });
+		}
+		// Lưu thông tin node vào popup
+		function cacheNodeChooseJob(node){
+			$("#choose-job").data("node", node);
+		}
+		// Lấy thông tin node tại popup
+		function getCacheNodeChooseJob(){
+			return $("#choose-job").data("node");
+		}
+		// Sự kiện xóa 1 công việc
+		function deleteNode(jobChainNodeID){
+			$("#waiting").modal('show');
+			$.ajax({
+				url: '/api/jobchain/node',
+				type: 'DELETE',
+				dataType: 'JSON',
+				data: {
+					jobChainID: jobChainID,
+					jobChainNodeID: jobChainNodeID
+				},
+				success: function(result){
+					stopJobChain();
+					loadJobChain();
+				}
+			})
+			// .always(function() {
+			// 	$("#waiting").modal('hide');
+			// });
+		}
+		/************************ LỰA CHỌN CÔNG VIỆC ****************************/
+		/************************************************************************/
+
+		/************************************************************************/
+		class Inputs {
+			constructor(infos){
+				this.listTypesEditor = {}
+			}
+			renderHTML(){
+
+			}
+			getValue(){
+
+			}
+		}
+		/******************* CHỈNH SỬA THÔNG TIN CÔNG VIỆC **********************/
+		// Mở chứng thực ở page khác
+		var signinWin;
+		$("#editor .auth-url").click(function(event) {
+			var href = $(this).attr("href");
+			var posx = 800;
+			var posy = 500;
+			signinWin = PopupCenter(href, "Sign In", 780, 410);
+			setTimeout(CheckLoginStatus, 2000);
+			signinWin.focus();
+			return false;
+		});
+		function PopupCenter(url, title, w, h) {
+			var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
+			var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY;
+
+			var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+			var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+			var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+			var top = ((height / 2) - (h / 2)) + dualScreenTop;
+			var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+			if (window.focus) {
+				newWindow.focus();
+			}
+			return newWindow;
+		}
+
+		function CheckLoginStatus() {
+			if (signinWin.closed) {
+				loadPopupJobEditor();
+			}
+			else setTimeout(CheckLoginStatus, 1000);
+		}
+
+
+		var listTypesEditor = {};
+		$("#editor").on("shown.bs.modal", function(){
+			$("#editor #loading-save").addClass('hidden');
+			$("#editor #message").addClass('hidden');
+		})
+		$("#editor").on("hidden.bs.modal", function(){
+			$("#editor #loading-save").addClass('hidden');
+			$("#editor #message").addClass('hidden');
+		})
+		$("#editor #submit").click(function(event){
+			var jobChainNodeID = getCachePopupJobEditor().infos.jobChainNodeID;
+
+			// Options
+			var options = getOptions();
+			// Account
+			var inputChecked = $("#editor .account input[name='account']:checked");
+			var accountID = (inputChecked.length > 0) ? inputChecked.val() : null;
+			// Config
+			var config = {};
+			Object.keys(listTypesEditor).forEach(function(key){
+				var typeEditor = listTypesEditor[key];
+				config[key] = typeEditor.getValue();
+			})
+			if (!verifyOptions()) return false;
+			if (!verifyAccounts()) return false;
+			if (!verifyInputs()) return false;
+
+			$("#editor #loading-save").removeClass('hidden')
+			$("#editor #submit").addClass('disabled');
+			$.ajax({
+				url: '/api/jobchain/node',
+				type: 'PUT',
+				dataType: 'JSON',
+				data: {
+					options: options,
+					jobChainNodeID: jobChainNodeID,
+					accountID: accountID,
+					config: config
+				},
+				success: function(result){
+					stopJobChain();
+					if (result.success) $("#editor #message").addClass('alert-success').removeClass("alert-danger");
+					else $("#editor #message").addClass('alert-danger').removeClass("alert-success");
+					$("#editor #message").html(result.message);
+					$("#loading-jobstree").show();
+					loadJob(function(){
+						$("#loading-jobstree").hide();
+					});
+				},
+				error: function(){
+					$("#editor #message").addClass('alert-danger').removeClass("alert-success");
+					$("#editor #message").html("Error");
+				}
+			})
+			.always(function(){
+				$("#editor #loading-save").addClass('hidden');
+				$("#editor #message").removeClass('hidden');
+				$("#editor #submit").removeClass('disabled');
+			})
+		});
+		function verifyOptions(options={}){
+			return true;
+		}
+		function verifyAccounts(accounts={}){
+			if ($("#editor .account input[name='account']:checked").length > 0
+				|| $("#editor .account input[name='account']").length <= 0)
+				return true;
+			$("#editor .account .panel-collapse").collapse("show");
+			$("#editor #message").removeClass('hidden').addClass('alert-danger').text("Required Account");
+			return false;
+		}
+		function verifyInputs(inputs={}){
+			var result = true;
+			Object.keys(listTypesEditor).forEach(function(key){
+				var typeEditor = listTypesEditor[key];
+				result = result && typeEditor.verify();
+			})
+			if (result) return true;
+			$("#editor .config .panel-collapse").collapse("show");
+			$("#editor #message").removeClass('hidden').addClass('alert-danger').text("Please Enter Required Inputs");
+			return false;
+		}
+		function getOptions(){
+			var options = {};
+			options.prefix = $('#editor .options [name="prefix"]').val();
+
+			options.nextsHidden = [];
+			$("#editor .options .nexts-active .list-nexts .input:not(:checked)").each(function(index, el) {
+				var name = $(this).attr('name');
+				name = name.slice(6);
+				options.nextsHidden.push(name);
+			});
+			return options;
+		}
+		// Lưu cache node vào popup
+		function cachePopupJobEditor(node){
+			$("#editor").data('node',node);
+		}
+		// Lấy cache node từ popup
+		function getCachePopupJobEditor(){
+			return $("#editor").data('node');
+		}
+		// Load popup khi chỉnh sửa công việc
+		function loadPopupJobEditor(){
+			$("#editor").modal("show");
+			var node = getCachePopupJobEditor();
+			$("#editor .section").removeClass('hidden');
+			$("#editor .section").removeClass('is-loaded');
+			$("#editor #submit").addClass('disabled');
+			$.ajax({
+				url: '/api/jobchain/node',
+				type: 'GET',
+				dataType: 'JSON',
+				data: {
+					jobChainID: jobChainID,
+					jobChainNodeID: node.infos.jobChainNodeID
+				},
+				success: function(data){
+					if (!data.success)
+						$("#editor").modal("hide");
+
+					var jobInfo = data.jobInfo;
+					if (jobInfo.name) $("#editor .modal-title").text(jobInfo.name);
+					loadOptions(data.options, {
+						nextsAttributes: jobInfo.nextsAttributes
+					});
+					loadAccount(data.account);
+					loadTemplate(data.template);
+					loadConfig(data.config);
+				}
+			})
+			.always(function(){
+				$("#editor #submit").removeClass('disabled');
+			});
+			function loadOptions(sectionOptions, moreInfo){
+				var $options = $('#editor .options');
+				$options.addClass('is-loaded');
+				var $inputGroup = $options.find(".input_group");
+				$inputGroup.empty();
+				// Prefix
+				{
+					var prefix = (sectionOptions && sectionOptions['prefix']) ? sectionOptions['prefix'] : "";
+					var $prefix = $('<div class="form-group">\
+								<label for="prefix">Prefix</label>\
+								<input value="'+prefix+'" type="text" class="form-control input" id="prefix" name="prefix">\
+							</div>');
+					$inputGroup.append($prefix);
+				}
+
+				// Nexts active
+				{
+					var nextsHidden = sectionOptions.nextsHidden;
+					var nextsAttributes = moreInfo.nextsAttributes;
+					var $nextsActive = $('<div class="form-group nexts-active">\
+								<label for="prefix">The next jobs are displayed</label>\
+								<div class="list-nexts"></div>\
+							</div>')
+					var $listNexts = $nextsActive.find(".list-nexts");
+					$listNexts.empty();
+					nextsAttributes.forEach(function(nextAttributes){
+						var checked = !nextsHidden || nextsHidden.indexOf(nextAttributes.field_name) == -1 ? "checked" : "";
+						var html = '<div><label class="checkbox-inline"><input class="input" '+checked+' name="nexts.'+nextAttributes.field_name+'" type="checkbox"> '+nextAttributes.name+'</label></div>';
+						$listNexts.append(html);
+					});
+					$inputGroup.append($nextsActive);
+				}
+
+				// Show interval Time
+				// {
+				// 	var prefix = (sectionOptions && sectionOptions['intervalTime']) ? sectionOptions['prefix'] : "";
+				// 	var $prefix = $('<div class="form-group">\
+				// 				<label for="prefix">Interval Time (second)</label>\
+				// 				<input value="'+prefix+'" type="text" class="form-control input" id="prefix" name="prefix">\
+				// 			</div>');
+				// 	$inputGroup.append($prefix);
+				// }
+
+			}
+			function loadAccount(sectionAccount){
+				if (!sectionAccount)
+					return $("#editor .account").addClass('hidden');
+				$("#editor .account .auth-url").attr('href',sectionAccount.authUrl);
+
+				$("#editor .account .list-account").empty();
+				sectionAccount.accounts.forEach(function(account){
+					var html = '<input class="hidden" type="radio" '+((account.checked) ? 'checked' : "")+' name="account" value="'+account.ID+'" id="'+account.ID+'">\
+							<li>\
+								<div class="header">\
+									<label for="'+account.ID+'"></label>\
+								</div>\
+								<div class="body">\
+									<h4>'+account.name+'</h4>\
+									<p>'+account.identity+'</p>\
+								</div>\
+							</li>';
+					$("#editor .account .list-account").append(html);
+				})
+				$("#editor .account").addClass('is-loaded');
+			}
+			function loadTemplate(sectionTemplate){
+				if (!sectionTemplate || sectionTemplate.length <= 0)
+					return $("#editor .template").addClass("hidden")
+				$("#editor .template .list-template").empty();
+				sectionTemplate.forEach(function(template){
+					var html = '<li>{'+template.field_name+'}: '+template.name+' ('+template.jobSlug+')</li>';
+					$("#editor .template .list-template").append(html);
+				});
+				$("#editor .template").addClass('is-loaded');
+			}
+			function loadConfig(sectionConfig){
+				listTypesEditor = {};
+
+				if (!sectionConfig || sectionConfig.length <= 0)
+					return $("#editor .config").addClass("hidden")
+				$("#editor .config #inputs").empty();
+				sectionConfig.forEach(function(inputInfo){
+					// Type manager trong input-type.js
+					var type = TypeManager.createType(inputInfo.type, inputInfo);
+					listTypesEditor[inputInfo.field_name] = type;
+					$("#editor .config #inputs").append(type.getElement());
+				})
+				$("#editor .config").addClass('is-loaded');
+			}
+		}
+		/******************* CHỈNH SỬA THÔNG TIN CÔNG VIỆC **********************/
+		/************************************************************************/
+
+
+		// nodeRootInfo {childs, image, nextName, nextField, id, type (editor | add)}
+		function Tree(selector, nodeRootInfo){
+			this.nodeRoot = new Node(nodeRootInfo);
+			this.selector = selector;
+			this.render = function(){
+				var html = this.nodeRoot.html();
+				$(selector).html("");
+				this.nodeRoot.render($(selector));
+			}
+
+			this.removeNode = function($node){
+				var node = this.findNode($node);
+				if (!node) return;
+				var nodeParent = this.findNodeParent(node);
+
+				var nextName = node.nextName;
+				var newNode = new Node({nextName: nextName, type: "add"});
+				nodeParent.childs.splice(nodeParent.childs.indexOf(node), 1);
+				nodeParent.childs.push(newNode);
+				node.element.parent().html(newNode.element);
+			}
+			this.changeNode = function(oldNode, newNode){
+				var nodeParent = this.findNodeParent(oldNode);
+				nodeParent.childs.splice(nodeParent.childs.indexOf(oldNode), 1);
+				nodeParent.childs.push(newNode);
+				var parentE = oldNode.element.parent();
+				parentE.empty();
+				newNode.render(parentE);
+			}
+			this.findNodeParent = function(node){
+				return this.nodeRoot.findNodeParent(node);
+			}
+			this.findNode = function($node){
+				return this.nodeRoot.findNode($node);
+			}
+			this.isRoot = function(node){
+				return node == this.nodeRoot;
+			}
+
+			this.render();
+			// this.changeNode(this.findNode($($(".node")[1])), new Node({
+			// 		image: "123",
+			// 		type: "add",
+			// 		nextName: "123"
+			// 	}));
+			// console.log(this.findNodeParent(this.findNode($($(".node")[1]))))
+			return this;
+		}
+		// infos { childs, image, nextName, id, type (editor | add) }
+		function Node(infos){
+			var thisObj = this;
+
+			this.init = function(){
+				this.infos = infos;	// {  image, type, nextName, nextField, childs, jobSlug, jobChainID, jobChainNodeID}
+				var html = "";
+				if (infos.type == "editor")
+					html = '<div class="item" id="'+((infos.id)?infos.id:'')+'"><button class="close">X</button><div class="icon"><img src="'+infos.image+'"></div></div>';
+				else html = '<div class="item add" id="'+((infos.id)?infos.id:'')+'"><span class="icon-add">+</span></div>';
+				this.element = $('<div '+((infos.id)?'id="node_' + infos.id + '"':'')+' class="node '+infos.type+'"><div class="next-name">'+infos.nextName+'</div>'+html+'</div>');
+
+				if (!infos.nextName) this.element.find(".next-name").remove();
+				this.element.data("node", this);
+
+				this.image = infos.image;
+				this.nextName = infos.nextName;
+				this.type = infos.type;
+				this.childs = [];
+				if (infos.childs)
+					infos.childs.forEach(function(child){
+						thisObj.childs.push(new Node(child));
+					})
+				this.addEvent();
+			}
+			
+
+			this.addEvent = function(){
+				if (this.type == "editor")
+					this.addEventEditor();
+				else this.addEventAdd();
+			}
+			this.addEventAdd = function(){
+				this.element.click(function(e){
+					popupChooseJob(true);
+					cacheNodeChooseJob(thisObj);
+				});
+			}
+			this.addEventEditor = function(){
+				if (this.infos.id == "root") return;
+				this.element.find(".close").click(function(event) {
+					bootbox.confirm({
+						message: "Bạn có muốn xóa công việc "+thisObj.infos.jobSlug+" không?",
+						buttons: {
+							confirm: {
+								label: 'Xóa',
+								className: 'btn-danger'
+							},
+							cancel: {
+								label: 'Hủy',
+								className: ''
+							}
+						},
+						callback: function (result) {
+							if (result)
+								deleteNode(thisObj.infos.jobChainNodeID);
+						}
+					});
+					return false;
+				});
+				this.element.click(function(e){
+					cachePopupJobEditor(thisObj);
+					loadPopupJobEditor();
+					return false;
+				})
+			}
+			this.render = function($element){
+				$element.append(this.element);
+				if (this.childs.length > 0){
+					var $subContainer = $('<div class="sub-container"></div>');
+					this.childs.forEach(function(child){
+						var $itemsSub = $('<div class="items-sub"></div>');
+						child.render($itemsSub);
+						$subContainer.append($itemsSub);
+					});
+					$element.append($subContainer);
+				}
+			};
+
+			this.html = function(){
+				var html = this.element[0].outerHTML;
+				var htmlChild = "";
+				this.childs.forEach(function(child){
+					htmlChild += '<div class="items-sub">' + child.html(); + '</div>';
+				});
+				if (htmlChild != "")
+					htmlChild = '<div class="sub-container">'+htmlChild+'</div>';
+				return html + htmlChild;
+			}
+
+			this.findNodeParent = function(node){
+				if (this.childs.length <= 0) return null;
+				if (this.childs.indexOf(node) != -1)
+					return this;
+				for(var i = 0; i < this.childs.length; i++){
+					var foundNode = this.childs[i].findNodeParent(node);
+					if (foundNode) return foundNode;
+				}
+				return null;
+			}
+
+			this.findNode = function($node){
+				if (this.element[0] == $node[0])
+					return this;
+				if (this.childs.length <= 0) return null;
+				for(var i = 0; i < this.childs.length; i++){
+					var foundNode = this.childs[i].findNode($node);
+					if (foundNode) return foundNode;
+				}
+				return null;
+			}
+
+			this.init();
+			return this;
+		}
+
+		// Load chuỗi công việc từ db
+		function loadJobChain(){
+			$("#waiting").modal('show');
+			loadJob(function(){
+				$("#waiting").modal('hide');
+			})
+		}
+		loadJob(function(){
+			$("#loading-jobstree").hide();
+		})
+		function loadJob(done){
+			$.ajax({
+				url: '/api/jobchain/nodes',
+				type: 'GET',
+				dataType: 'JSON',
+				data: {jobChainID: jobChainID},
+				// Results {  image, type, nextName, nextField, childs, jobSlug, jobChainID, jobChainNodeID}
+				success: function(results){
+					nodeTree = new Tree ("#jobstree", {
+						childs: [results],
+						id: "root",
+						image: "/images/logo.png",
+						type: "editor"
+					});
+				},
+				error: function(xhr,status,error) {
+					console.log("error");
+				}
+			})
+			.always(function(){
+				done();
+			});
+		}
+
+
+	});
+	
+</script>
+<% include template-parts/footer %>

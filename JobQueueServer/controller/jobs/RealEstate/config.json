@@ -1,0 +1,51 @@
+{
+    "type": "trigger",
+    "optionsAttributesName": [
+        "prefix",
+        "nexts"
+    ],
+    "outputAttributes": {
+        "next": [
+            {
+                "field_name": "name",
+                "name": "Name"
+            },
+            {
+                "field_name": "price",
+                "name": "Price"
+            },
+            {
+                "field_name": "url",
+                "name": "URL"
+            }
+        ]
+    },
+    "inputAttributes": [
+        {
+            "field_name": "source",
+            "name": "Source",
+            "type": "select",
+            "choices": {
+                "muabannhadat.vn": "muabannhadat.vn"
+            },
+            "value": "muabannhadat.vn"
+        },
+        {
+            "field_name": "url_muabannhadat.vn",
+            "name": "URL",
+            "type": "text",
+            "attributes": {
+                "placeholder": "http://www.muabannhadat.vn/nha-dat-3490"
+            },
+            "helper": "Select URL <a href='http://www.muabannhadat.vn/nha-dat-3490' target='_blank' >here</a>"
+        }
+    ],
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "name": "Real Estate",
+    "excerpts": "Track real estate news",
+    "categoriesSlug": ["crawler"],
+    "hasAccount": false
+}

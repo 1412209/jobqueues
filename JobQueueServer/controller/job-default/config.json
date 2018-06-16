@@ -1,0 +1,111 @@
+{
+    "type": "target",
+    "outputAttributes": {
+        "next": [
+            {
+                "field_name": "dui_filename",
+                "name": "File Name"
+            }
+        ]
+    },
+    "inputAttributes": [
+        {
+            "field_name": "fileUrl",
+            "name": "File upload Url",
+            "type": "text",
+            "attributes": {
+
+            },
+            "conditions": {
+                "field": "value",
+                "fieldGroup.field": "value"
+            },
+            "class": "col-sm-2"
+        },
+        {
+            "field_name": "path",
+            "name": "Path file is save",
+            "type": "text"
+        },
+        {
+            "field_name": "checkbox",
+            "name": "Path file is save",
+            "type": "checkbox"
+        },
+        {
+            "field_name": "select",
+            "name": "Path file is save",
+            "type": "select",
+            "choices": {
+                "name1": "Name 1",
+                "name2": "Name 2"
+            }
+        },
+        {
+            "field_name": "radio",
+            "name": "Path file is save",
+            "type": "radio",
+            "choices": {
+                "name1": "Name 1",
+                "name2": "Name 2"
+            }
+        },
+        {
+            "field_name": "repeat",
+            "name": "Path file is save",
+            "type": "repeat",
+            "fields": [
+                {
+                    "field_name": "select",
+                    "name": "Path file is save",
+                    "type": "select",
+                    "choices": {
+                        "name1": "Name 1",
+                        "name2": "Name 2"
+                    }
+                },
+                {
+                    "field_name": "radio",
+                    "name": "Path file is save",
+                    "type": "radio",
+                    "choices": {
+                        "name1": "Name 1",
+                        "name2": "Name 2"
+                    }
+                }
+            ]
+        },
+        {
+            "field_name": "group",
+            "name": "Path file is save",
+            "type": "group",
+            "fields": [
+                {
+                    "field_name": "select",
+                    "name": "Path file is save",
+                    "type": "select",
+                    "choices": {
+                        "name1": "Name 1",
+                        "name2": "Name 2"
+                    }
+                },
+                {
+                    "field_name": "radio",
+                    "name": "Path file is save",
+                    "type": "radio",
+                    "choices": {
+                        "name1": "Name 1",
+                        "name2": "Name 2"
+                    }
+                }
+            ]
+        }
+    ],
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "name": "Dropbox Upload Image",
+    "categoriesSlug": ["dropbox"],
+    "hasAccount": true
+}

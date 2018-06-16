@@ -1,0 +1,38 @@
+{
+    "type": "action",
+    "optionsAttributesName": [
+        "prefix",
+        "nexts"
+    ],
+    "outputAttributes": {},
+    "inputAttributes": [
+        {
+            "field_name": "mail_to",
+            "name": "Mail to:",
+            "type": "text"
+        },
+        {
+            "field_name": "subject",
+            "name": "Subject",
+            "type": "text"
+        },
+        {
+            "field_name": "text",
+            "name": "Text",
+            "type": "text"
+        },
+        {
+            "field_name": "content",
+            "name": "Content",
+            "type": "editor"
+        }
+    ],
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "name": "Send Email By Gmail",
+    "excerpts": "Send email HTML by Gmail",
+    "categoriesSlug": ["google","gmail"],
+    "hasAccount": true
+}

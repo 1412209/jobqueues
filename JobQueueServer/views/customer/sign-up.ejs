@@ -1,0 +1,131 @@
+<% include template-parts/header %>
+<div class="page-login">
+	<div class="bg"></div>
+	<div class="box-login box-sign-up">
+			<!-- <div class="logo">
+				<img src="/images/logo.png">
+			</div> -->
+		<h1 class="title">SIGN UP</h1>
+		<form class="login-form row" action="/signup" method="post">
+			<div class="col-md-6">
+				<div class="input-group">
+					<i class="icon fa fa-user" aria-hidden="true"></i>
+					<input class="input" type="text" id="fullname" name="fullname" placeholder="Full Name" autocomplete="off">
+				</div>
+				<div class="input-group">
+					<i class="icon fa fa-envelope" aria-hidden="true"></i>
+					<input class="input" type="email" id="email" name="email" placeholder="Email (*)" autocomplete="off">
+				</div>
+
+				<div class="input-group">
+					<i class="icon fa fa-user" aria-hidden="true"></i>
+					<input class="input" type="text" id="username" name="username" placeholder="Username (*)" autocomplete="off">
+				</div>
+				<div class="input-group">
+					<i class="icon fa fa-lock" aria-hidden="true"></i>
+					<input class="input" type="password" id="password" name="password" placeholder="Password (*)" autocomplete="off">
+				</div>
+				<div class="input-group">
+					<i class="icon fa fa-lock" aria-hidden="true"></i>
+					<input class="input" type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password (*)" autocomplete="off">
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="input-group">
+					<i class="icon fa fa-phone" aria-hidden="true"></i>
+					<input class="input" type="tel" id="phone" name="phone" placeholder="Phone" autocomplete="off">
+				</div>
+				<div class="input-group">
+					<i class="icon fa fa-birthday-cake" aria-hidden="true"></i>
+					<input class="input" type="date" id="dateOfBirth" name="dateOfBirth" placeholder="Date Of Birth" autocomplete="off">
+				</div>
+				<div class="input-group">
+					<i class="icon fa fa-times" aria-hidden="true"></i>
+					<select name="gender" id="gender" class="input">
+						<option value="1">Male</option>
+						<option value="0">Female</option>
+						<option value="-1">Other</option>
+					</select>
+				</div>
+				<div class="input-group">
+					<i class="icon fa fa-location-arrow" aria-hidden="true"></i>
+					<input class="input" type="text" id="address" name="address" placeholder="Address" autocomplete="off">
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="text-right"><input class="submit" type="submit" name="" value="Sign Up"></div>
+		</form>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$.validator.setDefaults({
+					onkeyup: function (element, event) {
+						$(element).removeClass('error');
+						$(element).parent().children('.error').remove();
+					}
+				});
+				$(".login-form").validate({
+					rules: {
+						email: {
+							required: true,
+							email: true,
+							remote: {
+								url: "/signup/email-validate",
+								type: 'get',
+								data: {
+									email: function() {
+										return $("#email").val();
+									}
+								}
+							}
+						},
+						username: {
+							required: true,
+							remote: {
+								url: "/signup/username-validate",
+								type: 'get',
+								data: {
+									username: function() {
+										return $("#username").val();
+									}
+								}
+							}
+						},
+						password: {
+							required : true,
+							minlength: 6
+						},
+						confirm_password: {
+							required: true,
+							equalTo: "#password"
+						}
+					},
+					messages: {
+						email: {
+							required: "Please enter Email.",
+							email: "Please enter a valid email format.",
+							remote: "That email is taken. Try another."
+						},
+						username: {
+							required: "Please enter Username.",
+							remote: "That username is taken. Try another."
+						},
+						password: {
+							required: 'Please enter Password.',
+							minlength: 'Password is too short.'
+						},
+						confirm_password: {
+							required: "Please enter Confirm Password.",
+							equalTo: "Confirmation password is not identical"
+						}
+					}
+				});
+			});
+		</script>
+		<div class="more-info">
+			<div class="text-left">
+				<a href="/login"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Sign In</a>
+			</div>
+		</div>
+	</div>
+</div>
+<% include template-parts/footer %>

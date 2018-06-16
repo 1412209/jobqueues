@@ -1,0 +1,41 @@
+<div class="jobs_status text-right">
+	<input type="checkbox" class="hidden" <%= (body.content.status) ? "checked" : "" %> name="jobs_status" id="jobs_status">
+	<label for="jobs_status" class="jobs_status_button"></label>
+</div>
+<style type="text/css">
+	.jobs_status { display: block; width: 100%; margin-bottom: 30px; }
+	.jobs_status.disable { pointer-events: none; opacity: .7; }
+	.jobs_status .jobs_status_button { width: 80px; height: 40px; border-radius: 20px; border: 1px solid #ccc; background-color: #fff; cursor: pointer; position: relative; transition: all ease .4s; }
+	.jobs_status .jobs_status_button:before{ position: absolute; content: ""; transition: all ease .4s; width: 40px; height: 40px; border-radius: 50%; top: -1px; left: -1px; background-color: #ddd; border-color: #bbb; }
+	#jobs_status:checked + .jobs_status_button { border-color: #32cc09; }
+	#jobs_status:checked + .jobs_status_button:before { left: 39px; background-color: #32cc09; border-color: #32cc09; }
+</style>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$("#jobs_status").change(function(event) {
+			var isChecked = $(this).is(":checked");
+			console.log(isChecked)
+			var jobChainID = $("input[name='jobChainID']").val();
+			$(".jobs_status").addClass('disable');
+			$.ajax({
+				type: 'post',
+				url: "/dashboard/job-chain/editor/status",
+				dataType: 'json',
+				data: {
+					jobChainID: jobChainID,
+					turnOn: (isChecked) ? 1 : 0
+				},
+				success: function(data){
+					$(".jobs_status").removeClass('disable')
+					if (data.success)
+						window.location.href = "";
+					else alert("Error");
+				},
+				error: function(){
+					$(".jobs_status").removeClass('disable');
+					alert("Error");
+				}
+			});
+		});
+	});
+</script>

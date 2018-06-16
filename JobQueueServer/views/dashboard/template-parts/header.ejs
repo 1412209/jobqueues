@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Job Queue</title>
+	<link href="/images/favicon.png" rel="shortcut icon" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<header class="header">
+		<nav class="navbar navbar-inverse">
+			<div class="container flex nav-container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/dashboard"><img src="/images/logo-white.png"></a>
+				</div>
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+						<li><a href="/dashboard">Dashboard</a></li>
+						<li><a href="/dashboard/jobchain">Job Chain</a></li>
+						<li><a href="/dashboard/popular">Popular</a></li>
+						<li><a href="/dashboard/my-accounts">My Accounts</a></li>
+						<li><a href="/dashboard/job-block">Job Block</a></li> 
+						<li><a href="/dashboard/job-log">Job Log</a></li> 
+					</ul>
+				</div>
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar1">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span> 
+				</button>
+				<div class="user-info dropdown">
+					<div class="user-action dropdown-toggle" data-toggle="dropdown"><span><%= header.user.fullname %></span> <i class="fa fa-angle-down" aria-hidden="true"></i></div>
+					<ul class="dropdown-menu dropdown-menu-right">
+						<li><a href="/dashboard/user">Thông tin</a></li>
+						<% if (header.user.hasChangePassword) { %><li><a href="/dashboard/user#change-pass">Đổi mật khẩu</a></li> <% } %>
+						<li class="divider"></li>
+						<li><a href="/dashboard/popular/shared">Đã chia sẻ</a></li>
+						<li class="divider"></li>
+						<li><a href="/logout">Đăng xuất</a></li>
+					</ul>
+				</div>
+				<div class="mobile-menu">
+					<div class="collapse navbar-collapse" id="myNavbar1">
+						<ul class="nav navbar-nav">
+							<li><a href="/dashboard">Dashboard</a></li>
+							<li><a href="/dashboard/jobchain">Job Chain</a></li>
+							<li><a href="/dashboard/popular">Popular</a></li>
+							<li><a href="/dashboard/my-accounts">My Accounts</a></li>
+							<li><a href="/dashboard/job-block">Job Block</a></li> 
+							<li><a href="/dashboard/job-log">Job Log</a></li> 
+						</ul>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			var $active = null;
+			var url = window.location.href;
+			var oldHref = null;
+			$(".header .navbar-nav>li").each(function(index, el) {
+				var li = $(this);
+				var href = li.find('a').attr('href');
+				if (url.indexOf(href) != -1 && (!oldHref || oldHref.length < href.length)){
+					$active = li;
+					oldHref = href;
+				}
+			});
+			if ($active)
+				$active.addClass('active')
+		});
+	</script>
+	<main>

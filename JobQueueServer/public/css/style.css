@@ -1,0 +1,399 @@
+@font-face {
+    font-family: OpenSans;
+    src: url("/fonts/OpenSans-Regular.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+/*@font-face {
+    font-family: OpenSans;
+    src: url("/fonts/OpenSans-Bold.ttf");
+    font-weight: normal;
+    font-style: italic;
+}*/
+@font-face {
+    font-family: OpenSans;
+    src: url("/fonts/OpenSans-Bold.ttf");
+    font-weight: bold;
+    font-style: normal;
+}
+textarea { resize: vertical; }
+.item.add < .node { color: red; }
+.clearfix { clear: both; }
+body { font-size: 14px; font-family: OpenSans; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+body > main { flex-grow: 1; display: flex; flex-direction: column; background-color: #f7f9fc; }
+img { max-width: 100%; max-height: 100%; }
+a { color: #0c717c; transition: all ease .4s; }
+a:hover, a:focus { color: #3dc7c9; text-decoration: none; }
+.flex { display: flex; }
+.centered { margin-left: auto; margin-right: auto; float: none; }
+.relative { position: relative; }
+.form-control, .btn, .alert, .modal-content, .dropdown-menu { border-radius: 0; }
+
+.mobile-menu { display: none !important; }
+.header .navbar { border-radius: 0px; min-height: auto; margin-bottom: 0px; border: none; background-color: #0c717c; }
+.header .navbar .navbar-collapse { flex-grow: 1; display: flex !important; justify-content: center; }
+.header .navbar-inverse .navbar-nav>li>a { color: #fff; transition: all ease .4s; padding: 10px 15px; }
+.header .navbar-inverse .navbar-nav>.active>a, .header .navbar-inverse .navbar-nav>li>a:focus,
+.header .navbar-inverse .navbar-nav>li>a:hover { background-color: #3dc7c9 }
+.header .navbar-nav:before { display: none; }
+.header .navbar-brand { padding: 10px 15px; height: 40px; }
+.header .user-info .user-action { margin: 0 -15px; color: #fff; display: block; height: 40px; padding: 10px 15px; font-weight: normal; line-height: 20px; margin-bottom: 0px; cursor: pointer; }
+.header .user-info .user-action > span { display: inline-block; white-space: nowrap; max-width: 200px; text-overflow: ellipsis; overflow: hidden; display: inline-block; vertical-align: middle; }
+.footer { padding: 15px 0px; border-top: 1px solid #eee; background-color: #f8fbff; }
+.footer .container { display: flex; align-items: center; }
+.footer .logo { display: flex; height: 30px; justify-content: flex-start; flex-grow: 1; }
+.footer .copyright { display: flex; justify-content: flex-end; flex-grow: 1 }
+.helper { font-size: 13px; font-style: italic; }
+
+section.page-title { background-color: #3dc7c9; padding: 10px 0px; }
+section.page-title .title { font-size: 16px; margin: 0px; color: #fff; }
+
+section.jobstree .add-item.root { display: inline-block; }
+section.jobstree { padding: 0px; background-color: #f8fbff; flex-grow: 1; text-align: center; }
+section.jobstree .node { text-align: center; display: inline-block; padding: 50px 30px; position: relative; }
+section.jobstree .node:before { position: absolute; left: 50%; width: 1px; top: 0px; bottom: 0; background-color: #333; content: ""; }
+section.jobstree .item { width: 100px; display: flex; justify-content: center; align-items: center; position: relative; transition: all ease .4s; height: 100px; cursor: pointer; padding: 10px; background-color: #fff; box-shadow: 0 0 3px rgba(0,0,0,0.1); border-radius: 5px; }
+section.jobstree .item:hover { box-shadow:  0 0 8px 3px rgba(0,0,0,0.2); }
+section.jobstree .item .close { position: absolute; right: -10px; top: -10px; width: 25px; height: 25px; font-size: 16px; outline: none; border-radius: 50%; background-color: #000; box-shadow: 0 0 5px rgba(0,0,0,.1); transition: all ease .4s; color: #fff; font-weight: normal; opacity: 0; }
+section.jobstree .item:hover .close { opacity: .8; }
+section.jobstree .item .icon { display: flex; width: 100%; height: 100%; justify-content: center; align-items: center; }
+section.jobstree .item .icon img { max-width: 100%; max-height: 100%; }
+section.jobstree .sub-container { text-align: center; display: flex; justify-content: center; }
+section.jobstree .sub-container .items-sub { display: inline-block; position: relative; }
+section.jobstree .sub-container .items-sub:before { position: absolute; content: ""; left: 0; right: 0; top: 0; height: 1px; background-color: #333; }
+section.jobstree .sub-container .items-sub:nth-of-type(1):before { left: 50%; }
+section.jobstree .sub-container .items-sub:nth-last-of-type(1):before { right: 50%; }
+/*section.jobstree .add-item { padding-left: 50px; padding-right: 50px; }*/
+/*section.jobstree .add-item .item { display: flex; justify-content: center; align-items: center; margin-left: auto; margin-right: auto; }*/
+section.jobstree .item .icon-add { font-size: 80px; color: #eee; }
+section.jobstree .next-name { background-color: #f8fbff; position: relative; margin: 5px 0px; }
+
+section.jobstree #loading-jobstree { padding: 20px 15px; margin: auto; }
+section.jobstree #choose-job.is-loading .loading { display: block; }
+section.jobstree #choose-job.is-loading .jobs-list { display: none; }
+section.jobstree #choose-job .loading { display: none; }
+section.jobstree #choose-job .jobs-list { display: flex; flex-wrap: wrap; padding: 0px; margin: 0px; list-style-type: none; }
+section.jobstree #choose-job .jobs-list > li { width: 20%; cursor: pointer; padding: 15px; }
+section.jobstree #choose-job .jobs-list > li .job-container { padding: 10%; background-color: #f7f7f7; border-radius: 0px; box-shadow: 0 0 5px 3px rgba(0,0,0,0.1) }
+section.jobstree #choose-job .jobs-list > li .name { font-size: 12px; margin-top: 10px; margin-bottom: 0px; }
+section.jobstree #choose-job .filters { display: flex; margin-left: -15px; margin-right: -15px; text-align: left; border-bottom: 1px solid #eee; margin-bottom: 20px; }
+section.jobstree #choose-job .filters .form-group { padding-left: 15px; padding-right: 15px; flex-grow: 1; }
+
+section.jobstree #editor { text-align: left; }
+section.jobstree #editor .title { font-size: 14px; margin: 0; }
+section.jobstree #editor .section { padding: 0; margin-bottom: 15px; border: none; box-shadow: none; }
+section.jobstree #editor .panel-default>.panel-heading { display: block; outline: none; text-decoration: none; }
+section.jobstree #editor .panel-collapse .panel-container { padding: 15px; }
+section.jobstree #editor .list-account { padding: 0px; list-style: none; }
+section.jobstree #editor .list-account > li { display: block; margin-bottom: 10px; display: flex; border-radius: 0px; overflow: hidden; border: 1px solid #dadfe2; }
+section.jobstree #editor .list-account > li > .header label { padding: 20px; position: relative; cursor: pointer; height: 100%; margin: 0px; background-color: #f1f4f5; }
+section.jobstree #editor .list-account > li > .header label:before { position: absolute; content: ""; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 15px; height: 15px; background-color: #fff; border-radius: 50%; border: 1px solid #dbe0e2; }
+section.jobstree #editor .list-account input:checked + li { border-color: #499df3; }
+section.jobstree #editor .list-account input:checked + li > .header label { background-color: #f0f7fe; }
+section.jobstree #editor .list-account input:checked + li > .header label:before { background-color: #499df3; border-color: #499df3 }
+section.jobstree #editor .list-account > li > .body { padding: 15px; }
+section.jobstree #editor .section .loaded { display: none; }
+section.jobstree #editor .section.is-loaded .loaded { display: block; }
+section.jobstree #editor .section.is-loaded .loading { display: none; }
+section.jobstree #editor .disabled:active { pointer-events: none; }
+section.jobstree #editor .repeat { margin-bottom: 15px; }
+section.jobstree #editor .repeat .repeat-container { padding: 15px; border: 1px solid #ddd; border-radius: 0px; }
+section.jobstree #editor .repeat .repeat-child { padding: 15px 0; border: 1px dotted #ccc; border-radius: 0px; margin-bottom: 10px; }
+section.jobstree #editor .repeat .repeat-child > * { padding-left: 15px; padding-right: 15px; }
+section.jobstree #editor .radio { margin-top: 0px; }
+section.jobstree #editor .group .group-child-list { padding: 15px; border: 1px solid #ddd; border-radius: 0px; }
+section.jobstree #editor .group .group-child-list .group-child { overflow: auto; margin-left: -15px; margin-right: -15px; }
+section.jobstree #editor .group .group-child-list .group-child > * { padding-left: 15px; padding-right: 15px; }
+section.jobstree #editor .group .group-child-list .group-child > *:last-of-type { margin-bottom: 0px; }
+section.jobstree #editor .options .nexts-active .list-nexts { padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+section.jobstree #editor .input_group { margin-left: -15px; margin-right: -15px; overflow: auto; }
+section.jobstree #editor .input_group > * { padding-left: 15px; padding-right: 15px; }
+
+section.jobstree #editor .section .form-group.typetext.error .input { border-color: #e27e7e; }
+section.jobstree #editor .section .form-group.typetextarea.error .input { border-color: #e27e7e; }
+section.jobstree #editor .section .form-group.typeeditor.error .input { border-color: #e27e7e; }
+
+
+section.jobstree { padding-bottom: 40px; }
+section.jobstree #jobstree #node_root .close { display: none; }
+section.jobstree #jobstree #node_root { padding-top: 0; }
+section.jobstree #jobstree .node.add { padding-bottom: 0px; }
+
+section.jobstree .job-chain-name { text-align: left; position: relative; padding-top: 15px; padding-bottom: 45px; width: 400px; max-width: 50%; }
+section.jobstree .job-chain-name input { width: 100%; border: none; cursor: pointer; background-color: transparent; padding: 5px 10px 5px 30px; outline: none; border-bottom: 1px dotted #aaa; }
+section.jobstree .job-chain-name input:focus { cursor: auto; }
+section.jobstree .job-chain-name .icon-edit { position: absolute; left: 5px; top: 23px; pointer-events: none; }
+section.jobstree .job-chain-name .loading { position: absolute; right: 5px; top: 23px; }
+
+.jobs_status { display: block; margin-bottom: 0px; padding: 0; }
+.jobs_status.disable { pointer-events: none; opacity: .7; }
+.jobs_status #loading-status { display: none; }
+.jobs_status.disable #loading-status { display: inline-block; }
+.jobs_status .jobs_status_button { width: 54px; height: 27px; border-radius: 20px; margin-bottom: 0px; border: 1px solid #ccc; background-color: #fff; cursor: pointer; position: relative; transition: all ease .4s; }
+.jobs_status .jobs_status_button:before{ position: absolute; content: ""; transition: all ease .4s; width: 27px; height: 27px; border-radius: 50%; top: -1px; left: -1px; background-color: #ddd; border-color: #bbb; }
+.jobs_status .input:checked + .jobs_status_button { border-color: #32cc09; }
+.jobs_status .input:checked + .jobs_status_button:before { left: 26px; background-color: #32cc09; border-color: #32cc09; }
+
+
+section.page-title .add-new { color: #fff; text-decoration: none; }
+section.job-chain-list { padding-top: 40px; padding-bottom: 40px; }
+section.job-chain-list .filters { width: 100%; margin-bottom: 40px; }
+section.job-chain-list .filters .search input { width: 100%; border: none; padding: 5px 10px; border-bottom: 1px dotted #aaa; background-color: transparent; outline: none; }
+section.job-chain-list .filters .search { position: relative; }
+section.job-chain-list .filters .search .icon-loading { position: absolute; top: 10px; right: 15px; }
+section.job-chain-list .list-infos { padding: 0; margin: 0; list-style-type: none; }
+section.job-chain-list .list-infos > li { display: flex; align-items: center; padding: 15px; box-shadow: 0 0 5px rgba(0,0,0,0.2); background: #fff; border-radius: 0px; margin-bottom: 15px; }
+section.job-chain-list .list-infos > li > .icon {  }
+section.job-chain-list .list-infos > li > .icon img { max-width: 40px; max-height: 40px; display: inline-block; }
+section.job-chain-list .list-infos > li > .infos { flex-grow: 1; padding-left: 15px; padding-right: 15px; width: 0; }
+section.job-chain-list .list-infos > li > .infos > .name { color: inherit; text-decoration: none; margin-bottom: 5px; display: block; }
+section.job-chain-list .list-infos > li > .infos > .name .text { margin: 0; font-size: 17px; white-space: nowrap;  overflow: hidden; text-overflow: ellipsis; }
+section.job-chain-list .list-infos > li > .infos > time { font-size: 13px; color: #999; font-style: italic; }
+section.job-chain-list .list-infos > li > .action .delete { cursor: pointer; text-decoration: none; padding: 0 5px; }
+section.job-chain-list .list-infos > li > .action .edit { cursor: pointer; text-decoration: none; padding: 0 5px; }
+section.job-chain-list .list-infos > li > .status { padding-left: 20px; }
+section.job-chain-list #loadmore { text-decoration: none; background-color: #3dc7c9; display: inline-block; border-radius: 5px; padding: 8px 15px; color: #fff; }
+
+#share-jobchain { text-align: left; }
+
+.jobchain-options {  }
+.jobchain-options #jobchain-options { background: transparent; border: none; border-radius: 0; font-size: 25px; outline: none; padding: 0 0 0 15px; box-shadow: none; }
+.jobchain-options a { outline: none; }
+
+.page-login { width: 100%; padding: 30px; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: auto; position: relative; }
+.page-login .logo { text-align: center; margin-bottom: 50px; }
+.page-login .logo > img { width: 120px; max-width: 50%; display: inline-block; }
+.page-login > .bg { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 1; overflow: hidden; }
+.page-login > .bg:before { content: ""; z-index: 1; filter: blur(8px); position: absolute; left: -10px; top: -10px; right: -10px; bottom: -10px; background-image: url(/images/bg-login.jpg); background-position: center; background-size: cover; }
+.page-login .box-login { width: 500px; z-index: 2; max-width: 90%; background-color: rgba(255,255,255,.8); padding: 40px; }
+.page-login .box-login .input-group { position: relative; display: block; margin-bottom: 20px; }
+.page-login .box-login .input { width: 100%; display: block; background-color: transparent; padding: 5px 15px 5px 40px; border: none; outline: none; border-bottom: 1px solid #777; }
+.page-login .box-login .input.error { border-color: #d00; }
+.page-login .box-login label.error { color: #d00; font-size: 12px; font-weight: normal; font-style: italic; }
+.page-login .box-login .icon { position: absolute; left: 5px; top: 8px; }
+.page-login .box-login .submit { border: none; padding: 5px 15px; outline: none; color: #fff; background-color: #3dc7c9; transition: all ease .4s; }
+.page-login .box-login .submit:hover { background-color: #0c717c; }
+.page-login .box-login .login-form { margin-bottom: 20px; }
+.page-login .box-login .social-login { text-align: center; }
+.page-login .box-login .social-login .item-social { cursor: pointer; width: 160px; max-width: 100%; display: inline-block; margin-bottom: 15px; }
+.page-login .box-login .social-login .item-social > img { width: 100%; }
+.page-login .box-login .title { font-weight: bold; font-size: 22px; margin-bottom: 30px; margin-top: 0px; padding-bottom: 15px; text-align: center; color: #0c717c; }
+
+.page-login .box-login.box-sign-up { width: 1000px; }
+
+section.accounts { padding: 40px 0px; }
+section.accounts .filters { background-color: transparent; padding-right: 15px; position: sticky; top: 30px; }
+section.accounts .filters .title-filters { margin-top: 0px; font-size: 14px; text-transform: uppercase; font-weight: bold; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #cadadc; color: #0c717c; }
+section.accounts .filters .filter { margin-bottom: 20px; }
+section.accounts .filters .form-control { border-color: #cfdaef }
+section.accounts .filters .custum-btn { background-color: #3dc7c9; border-color: #3dc7c9; color: #fff; transition: all ease .4s; }
+section.accounts .filters .custum-btn:hover { background-color: #0c717c; border-color: #0c717c; }
+section.accounts .filters .filter.search { border-bottom: 1px solid #cadadc; padding-bottom: 15px; }
+section.accounts .filters .filter label { font-weight: normal; color: #0c717c }
+section.accounts .list-accounts { padding: 0; margin: 0; list-style-type: none; }
+section.accounts .list-accounts > li { display: flex; padding: 15px; background: #fff; box-shadow: 0 0 5px rgba(0,0,0,0.2); border-radius: 0px; margin-bottom: 15px; align-items: center; }
+section.accounts .list-accounts > li .icon img { width: 60px; }
+section.accounts .list-accounts > li .infos { flex-grow: 1; padding-left: 30px; padding-right: 30px; }
+section.accounts .list-accounts > li .infos .name { position: relative; font-size: 15px; color: #0c717c; }
+section.accounts .list-accounts > li .infos .name .input { width: 100%; padding: 3px 10px 3px 40px; border: none; background: transparent; outline: none; cursor: pointer; border-bottom: 1px dotted #aaa; margin-bottom: 10px; }
+section.accounts .list-accounts > li .infos .name .input:focus { cursor: auto; }
+section.accounts .list-accounts > li .infos .name .icon { position: absolute; left: 10px; top: 8px; pointer-events: none; }
+section.accounts .list-accounts > li .infos .key { font-size: 13px; margin-bottom: 0px; }
+section.accounts .list-accounts > li .delete { cursor: pointer; }
+section.accounts .main-title { font-size: 20px; text-transform: uppercase; color: #0c717c; margin: 0; margin-bottom: 20px; font-weight: bold; }
+
+section.accounts #add-new-account-job .jobs-list { display: flex; flex-wrap: wrap; padding: 0px; margin: 0px; list-style-type: none; }
+section.accounts #add-new-account-job .jobs-list > li { width: 20%; cursor: pointer; padding: 15px; }
+section.accounts #add-new-account-job .jobs-list > li .job-container { padding: 10%; background-color: #f7f7f7; border-radius: 5px; box-shadow: 0 0 5px 3px rgba(0,0,0,0.1) }
+section.accounts #add-new-account-job .jobs-list > li .name { font-size: 12px; margin-top: 10px; margin-bottom: 0px; }
+
+section.jobblock { padding: 40px 0px; }
+section.jobblock .filters { background-color: transparent; padding-right: 15px; position: sticky; top: 30px; }
+section.jobblock .filters .title-filters { margin-top: 0px; font-size: 14px; text-transform: uppercase; font-weight: bold; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #cadadc; color: #0c717c; }
+section.jobblock .filters .filter { margin-bottom: 20px; }
+section.jobblock .filters .form-control { border-color: #cfdaef }
+section.jobblock .filters .custum-btn { background-color: #3dc7c9; border-color: #3dc7c9; color: #fff; transition: all ease .4s; }
+section.jobblock .filters .custum-btn:hover { background-color: #0c717c; border-color: #0c717c; }
+section.jobblock .filters .filter.search { border-bottom: 1px solid #cadadc; padding-bottom: 15px; }
+section.jobblock .filters .filter label { font-weight: normal; color: #0c717c }
+section.jobblock .main-title { font-size: 20px; text-transform: uppercase; color: #0c717c; margin: 0; margin-bottom: 20px; font-weight: bold; }
+section.jobblock .list-jobs { list-style-type: none; padding: 0; margin: 0; }
+section.jobblock .list-jobs > li { display: block; position: relative; overflow: auto; padding: 15px 0px; background-color: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); margin-bottom: 15px; }
+section.jobblock .list-jobs > li .icon { float: left; width: 110px; padding-left: 15px; padding-right: 15px; }
+section.jobblock .list-jobs > li .infos { float: left; width: calc(100% - 130px); padding-left: 15px; padding-right: 15px; }
+section.jobblock .list-jobs > li .infos .name { font-size: 17px; color: #0c717c; margin-top: 0px; margin-bottom: 7px; padding-bottom: 7px; border-bottom: 1px solid #cadadc; }
+section.jobblock .list-jobs > li .infos .description { padding-bottom: 7px; border-bottom: 1px solid #cadadc; font-size: 13px; }
+section.jobblock .list-jobs > li .infos .catInfo { font-size: 13px; float: left; padding: 7px 10px 7px 0px; }
+section.jobblock .list-jobs > li .infos .account { font-size: 13px; float: left; padding: 7px 10px 7px 0px; text-decoration: none; }
+section.jobblock .list-jobs > li .featured { padding: 10px; font-size: 18px; color: #fed700; cursor: pointer; position: absolute; top: 0px; right: 5px; }
+section.jobblock .list-jobs > li .featured .checked { color: #c2cbd9; transition: all ease .4s; }
+section.jobblock .list-jobs > li .featured .checkbox:checked + .checked, section.jobblock .list-jobs > li .featured:hover .checked { color: #ff2b58; }
+section.jobblock .list-jobs > li .viewmore { float: left; padding: 10px 0px 10px 10px; font-size: 13px; cursor: pointer; }
+
+section.joblog { padding: 40px 0px; }
+section.joblog .filters { background-color: transparent; padding-right: 15px; position: sticky; top: 30px; }
+section.joblog .filters .title-filters { margin-top: 0px; font-size: 14px; text-transform: uppercase; font-weight: bold; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #cadadc; color: #0c717c; }
+section.joblog .filters .filter { margin-bottom: 20px; }
+section.joblog .filters .form-control { border-color: #cfdaef }
+section.joblog .filters .custum-btn { background-color: #3dc7c9; border-color: #3dc7c9; color: #fff; transition: all ease .4s; }
+section.joblog .filters .custum-btn:hover { background-color: #0c717c; border-color: #0c717c; }
+section.joblog .filters .filter.search { border-bottom: 1px solid #cadadc; padding-bottom: 15px; }
+section.joblog .filters .filter label { font-weight: normal; color: #0c717c }
+section.joblog .main-title { font-size: 20px; color: #0c717c; margin: 0; margin-bottom: 20px; text-transform: uppercase; font-weight: bold; }
+section.joblog .controls { clear: both; display: flex; align-items: flex-end; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #cadadc; }
+section.joblog .controls .checkall { display: flex; align-items: center; flex-grow: 1 }
+section.joblog .controls .checkall label { margin-bottom: 0; font-weight: normal; }
+section.joblog .controls [name='checkall'] { margin-top: 0px; margin-right: 10px; }
+section.joblog .joblog-list > .alert { display: flex; }
+section.joblog .joblog-list > .alert .infos { flex-grow: 1; padding: 0 15px; }
+section.joblog .controls .actions a { outline: none; }
+
+section.dashboard { padding: 40px 0; }
+section.dashboard .box { background: #fff; box-shadow: 0 0 5px rgba(0,0,0,0.2); padding: 15px; margin-bottom: 30px; }
+section.dashboard .box-header { padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #cadadc; }
+section.dashboard .box-header .title{ font-size: 18px; color: #0c717c; padding: 0; margin: 0; }
+
+section.dashboard .box-jobchain .box-body { padding: 15px; }
+section.dashboard .box-jobchain .list-jobchain { padding: 0; margin: 0; list-style-type: none; }
+section.dashboard .box-jobchain .list-jobchain > li { display: flex; width: 100%; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eef4f5; }
+section.dashboard .box-jobchain .list-jobchain > li .icon > img { width: 50px; }
+section.dashboard .box-jobchain .list-jobchain > li > .infos { flex-grow: 1; padding-left: 15px; padding-right: 15px; width: 0; }
+section.dashboard .box-jobchain .list-jobchain > li > .infos .name { display: block; color: inherit; }
+section.dashboard .box-jobchain .list-jobchain > li > .infos .name .text { margin-top: 0px; margin-bottom: 5px; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+section.dashboard .box-jobchain .list-jobchain > li > .infos > time { font-size: 13px; color: #999; font-style: italic; }
+
+section.dashboard .box-accounts .box-body { padding: 15px; }
+section.dashboard .box-accounts .list-accounts { padding: 0; margin: 0; list-style-type: none; }
+section.dashboard .box-accounts .list-accounts > li { display: flex; width: 100%; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eef4f5; }
+section.dashboard .box-accounts .list-accounts > li .icon > img { width: 50px; }
+section.dashboard .box-accounts .list-accounts > li > .infos { flex-grow: 1; padding-left: 15px; }
+section.dashboard .box-accounts .list-accounts > li > .infos .name { display: block; color: inherit; }
+section.dashboard .box-accounts .list-accounts > li > .infos .name .text { margin-top: 0px; margin-bottom: 5px; font-size: 17px; }
+section.dashboard .box-accounts .list-accounts > li > .infos > time { font-size: 13px; color: #999; font-style: italic; }
+
+section.dashboard .box-joblogs .box-body { padding: 15px; }
+section.dashboard .box-joblogs .list-joblogs { padding: 0; margin: 0; list-style-type: none; }
+section.dashboard .box-joblogs .list-joblogs > li { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eef4f5; }
+section.dashboard .box-joblogs .list-joblogs > li.error { color: #a94442; }
+section.dashboard .box-joblogs .list-joblogs > li.info { color: #31708f; }
+
+section.popular { padding: 40px 0px; }
+section.popular .filters { background-color: transparent; padding-right: 15px; position: sticky; top: 30px; }
+section.popular .filters .title-filters { margin-top: 0px; font-size: 14px; text-transform: uppercase; font-weight: bold; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #cadadc; color: #0c717c; }
+section.popular .filters .filter { margin-bottom: 20px; }
+section.popular .filters .form-control { border-color: #cfdaef }
+section.popular .filters .custum-btn { background-color: #3dc7c9; border-color: #3dc7c9; color: #fff; transition: all ease .4s; }
+section.popular .filters .custum-btn:hover { background-color: #0c717c; border-color: #0c717c; }
+section.popular .filters .filter.search { border-bottom: 1px solid #cadadc; padding-bottom: 15px; }
+section.popular .filters .filter label { font-weight: normal; color: #0c717c }
+section.popular .main-title { font-size: 20px; color: #0c717c; margin: 0; margin-bottom: 20px; text-transform: uppercase; font-weight: bold; }
+section.popular .list-popular { list-style-type: none; margin: 0; padding: 0; }
+section.popular .list-popular > li { padding: 15px; border-radius: 0px; margin-bottom: 15px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+section.popular .list-popular > li .icons { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding-bottom: 10px; border-bottom: 1px solid #cadadc; margin-bottom: 10px; }
+section.popular .list-popular > li .icons > img { display: inline-block; width: 40px; height: 40px; }
+section.popular .list-popular > li .name { font-size: 18px; margin: 0; margin-bottom: 10px; color: #0c717c; }
+section.popular .list-popular > li .description { font-size: 13px; margin-bottom: 10px; }
+section.popular .list-popular > li .moreinfos { padding-top: 10px; border-top: 1px solid #cadadc; overflow: auto; }
+section.popular .list-popular > li .moreinfos .used { float: left; margin-right: 15px; margin-bottom: 10px; }
+section.popular .list-popular > li .moreinfos .author { float: left; margin-right: 15px; margin-bottom: 10px; }
+section.popular .list-popular > li .moreinfos .apply { float: right; border: none; background: #3dc7c9; transition: all ease .4s; padding: 5px 10px; color: #fff; }
+section.popular .list-popular > li .moreinfos .apply:hover { background: #0c717c; }
+section.popular .list-popular > li .moreinfos .delete { float: right; border: none; color: #d44242; background: transparent; transition: all ease .4s; padding: 5px 10px; }
+section.popular .list-popular > li .moreinfos .delete:hover { color: #c71f1f; }
+section.popular .list-popular > li .moreinfos .edit { float: right; border: none; color: #007eca; background: transparent; transition: all ease .4s; padding: 5px 10px; }
+section.popular .list-popular > li .moreinfos .eidt:hover { color: #024771; }
+
+section.user-info .box-user { padding: 30px 0; margin-top: 50px; margin-bottom: 50px; background: #fff; box-shadow: 0 0 5px rgba(0,0,0,0.2); overflow: auto; }
+section.user-info .box-user .avatar { width: 100%; margin-left: auto; margin-right: auto; max-width: 100px; margin-bottom: 30px; position: relative; }
+section.user-info .box-user .avatar > .img { position: relative; width: 100%; padding-top: 100%; }
+section.user-info .box-user .avatar > .img > img { position: absolute; left: 0; top: 0; border-radius: 50%; width: 100%; height: 100%; object-position: center; object-fit: cover; border: 1px solid #3dc7c9; }
+section.user-info .list-info  tr:first-of-type td { border-top: none; }
+section.user-info .list-info .input { width: 100%; border: none; pointer-events: none; outline: none; padding: 1px 5px; }
+section.user-info .list-info .btn-changing { display: inline-block; }
+section.user-info .list-info .btn-changing { display: none; }
+section.user-info .list-info.changing #change-info { display: none; }
+section.user-info .list-info.changing #btn-change-pass { display: none; }
+section.user-info .list-info.changing .btn-changing { display: inline-block; }
+section.user-info .list-info.changing .input { pointer-events: all; border-bottom: 1px dotted #999; }
+section.user-info .list-info .btn { margin-bottom: 10px; }
+#change-pass .input { margin-top: 10px; }
+#change-pass .error { font-size: 13px; font-style: italic; color: #d00; }
+#change-pass #message-pass { margin-top: 10px; }
+
+@media screen and (max-width: 1200px){
+
+}
+
+@media screen and (max-width: 992px){
+    .mobile-menu { display: block !important; }
+    .navbar-nav .open .dropdown-menu { position: static; float: none; width: auto; margin-top: 0; background-color: transparent; border: 0; -webkit-box-shadow: none; box-shadow: none; }
+    .navbar-nav .open .dropdown-menu > li > a { line-height: 20px; }
+    .navbar-nav .open .dropdown-menu > li > a, .navbar-nav .open .dropdown-menu .dropdown-header { padding: 5px 15px 5px 25px; }
+    .dropdown-menu > li > a { display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.42857143; color: #333; white-space: nowrap; }
+    .navbar-header { float: none; }
+    .navbar-toggle { display: block; }
+    .navbar-collapse { border-top: 1px solid transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1); }
+    .header .navbar-collapse.collapsing { display: block !important; }
+    .header .navbar-collapse.collapse { display: none!important; }
+    .navbar-nav { float: none!important; margin: 7.5px 50px 7.5px -15px }
+    .navbar-nav>li { float: none; }
+    .navbar-nav>li>a { padding-top: 10px;padding-bottom: 10px; }
+    .navbar-text { float: none; margin: 15px 0; }
+    .navbar-collapse.collapse.in { display: block!important; }
+    .collapsing {overflow: hidden!important; }
+
+    .header .navbar .nav-container { display: block; position: relative; }
+    .header .navbar-header { float: left; }
+    .header .user-info { float: right; }
+    .header .navbar-inverse .navbar-toggle { float: right; border: none; border-radius: 0; background: transparent; margin: 4px 0px 0px 10px; padding: 10px; padding-right: 0px; }
+    .header .mobile-menu { clear: both; }
+    .header .mobile-menu .navbar-collapse{ border-color: #b4d3d6; }
+    .header .mobile-menu .navbar-nav { text-align: center; }
+    .header .mobile-menu .navbar-nav > li { border-bottom: 1px solid #237a84; }
+    .header .mobile-menu .navbar-nav > li:last-of-type { border-bottom: none; }
+    .header .mobile-menu .navbar-nav > li > a { padding: 7px 15px; }
+
+    section.popular .flex { display: block; }
+    section.popular .filters { padding-right: 0px; }
+
+    section.accounts .flex { display: block; }
+    section.accounts .filters { padding-right: 0px; }
+
+    section.jobblock .flex { display: block; }
+    section.jobblock .filters { padding-right: 0px; }
+
+    section.joblog .flex { display: block; }
+    section.joblog .filters { padding-right: 0px; }
+
+    .footer .logo { height: 20px; }
+}
+
+@media screen and (max-width: 767px) {
+    section.dashboard .box-jobchain .list-jobchain > li > .infos .name .text { font-size: 15px; }
+    section.dashboard .box-jobchain .list-jobchain > li > .infos > time { font-size: 12px; }
+    section.dashboard .box-jobchain .box-body { padding: 0; }
+
+    section.dashboard .box-accounts .list-accounts > li > .infos .name .text { font-size: 15px; }
+    section.dashboard .box-accounts .list-accounts > li > .infos .identity { font-size: 13px; }
+    section.dashboard .box-accounts .list-accounts > li > .infos > time { font-size: 12px; }
+    section.dashboard .box-accounts .box-body { padding: 0; }
+
+    section.dashboard .box-joblogs .box-body { padding: 0; }
+    .footer .logo { height: 18px; }
+}
+
+@media screen and (max-width: 640px){
+    section.job-chain-list .list-infos > li { display: block; overflow: auto; }
+    section.job-chain-list .list-infos > li > .icon { float: left; width: 56px; margin-bottom: 15px; }
+    section.job-chain-list .list-infos > li > .infos { float: left; width: calc(100% - 56px); margin-bottom: 15px; }
+    section.job-chain-list .list-infos > li > .action { float: left; margin-left: 56px; }
+    section.job-chain-list .list-infos > li > .status { float: right; }
+    section.accounts .list-accounts > li { display: block; overflow: auto; }
+    section.accounts .list-accounts > li .icon { float: left; width: 56px; }
+    section.accounts .list-accounts > li .icon img { width: 40px; }
+    section.accounts .list-accounts > li .infos { float: left; width: calc(100% - 56px); padding: 0 0 0 10px; }
+    section.accounts .list-accounts > li .delete { float: right; }
+
+    section.jobblock .list-jobs > li .icon { width: 70px; }
+    section.jobblock .list-jobs > li .infos { width: calc(100% - 70px); }
+}

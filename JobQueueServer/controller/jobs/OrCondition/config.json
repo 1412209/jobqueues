@@ -1,0 +1,69 @@
+{
+    "type": "condition",
+    "optionsAttributesName": [
+        "prefix",
+        "nexts"
+    ],
+    "outputAttributes": {
+        "complete": [
+            {
+                "field_name": "or_value",
+                "name": "Or Value"
+            }
+        ]
+    },
+    "inputAttributes": [
+        {
+            "field_name": "conditions",
+            "name": "Or conditions",
+            "type": "repeat",
+            "min": 1,
+            "max": -1,
+            "fields": [
+                {
+                    "field_name": "variable",
+                    "name": "Variable",
+                    "type": "text"
+                },
+                {
+                    "field_name": "operator",
+                    "name": "Operator",
+                    "type": "select",
+                    "choices": {
+                        "equals": "equals",
+                        "containers": "containers",
+                        "startsWith": "starts with",
+                        "endsWith": "ends with",
+                        "not_equals": "does not equals",
+                        "not_containers": "does not containers",
+                        "not_startsWith": "does not starts with",
+                        "not_endsWith": "does not ends with"
+                    }
+                },
+                {
+                    "field_name": "value",
+                    "name": "Value",
+                    "type": "text"
+                }
+            ]
+        }
+    ],
+    "nextsAttributes": [
+        {
+            "field_name":"no",
+            "name":"No"
+        },
+        {
+            "field_name":"complete",
+            "name":"Complete"
+        },
+        {
+            "field_name":"yes",
+            "name":"Yes"
+        }
+    ],
+    "name": "Or Condition",
+    "excerpts": "Check one of the conditions correctly.",
+    "categoriesSlug": [],
+    "hasAccount": false
+}

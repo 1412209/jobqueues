@@ -1,0 +1,17 @@
+{
+    "type": "trigger",
+    "optionsAttributesName": [
+        "nexts",
+        "schedule"
+    ],
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "outputAttributes": {},
+    "name": "Schedule",
+    "excerpts": "Schedule for recurring jobs",
+    "categoriesSlug": [],
+    "hasAccount": false,
+    "minIntervalTime": 10000
+}

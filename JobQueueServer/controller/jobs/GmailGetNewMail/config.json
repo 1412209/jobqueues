@@ -1,0 +1,37 @@
+{
+    "type": "trigger",
+    "optionsAttributesName": [
+        "prefix",
+        "nexts"
+    ],
+    "outputAttributes": {
+        "next": [
+            {
+                "field_name": "from",
+                "name": "Mail From"
+            },
+            {
+                "field_name": "to",
+                "name": "Mail To"
+            },
+            {
+                "field_name": "subject",
+                "name": "Mail Subject"
+            },
+            {
+                "field_name": "content",
+                "name": "Mail content"
+            }
+        ]
+    },
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "name": "Get New Gmail",
+    "excerpts": "Emit event when Gmail has new email.",
+    "categoriesSlug": ["google","gmail"],
+    "hasAccount": true,
+    "showIntervalTime": true,
+    "minIntervalTime": 10000
+}

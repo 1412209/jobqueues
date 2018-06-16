@@ -1,0 +1,126 @@
+{
+    "type": "action",
+    "optionsAttributesName": [
+        "prefix",
+        "nexts"
+    ],
+    "nextsAttributes": [{
+        "field_name":"next",
+        "name":"next"
+    }],
+    "outputAttributes": {
+        "next": [
+            {
+                "field_name": "data",
+                "name": "Data"
+            }
+        ]
+    },
+    "inputAttributes": [
+        {
+            "field_name": "method",
+            "name": "Method",
+            "type": "select",
+            "choices": {
+                "get": "GET",
+                "post": "POST",
+                "put": "PUT",
+                "delete": "DELETE"
+            },
+            "class": "col-sm-4"
+        },
+        {
+            "field_name": "url",
+            "name": "URL",
+            "type": "text",
+            "class": "col-sm-8"
+        },
+        {
+            "field_name": "authentication",
+            "name": "Authentication",
+            "type": "repeat",
+            "fields": [
+                {
+                    "field_name": "username",
+                    "name": "Username",
+                    "type": "text",
+                    "class": "col-sm-6"
+                },
+                {
+                    "field_name": "password",
+                    "name": "Password",
+                    "type": "password",
+                    "class": "col-sm-6"
+                }
+            ],
+            "max": 1,
+            "min": 0,
+            "class": "clearfix"
+        },
+        {
+            "field_name": "headers",
+            "name": "Header(s)",
+            "type": "repeat",
+            "fields": [
+                {
+                    "field_name": "name",
+                    "name": "Name",
+                    "type": "text",
+                    "class": "col-sm-6"
+                },
+                {
+                    "field_name": "value",
+                    "name": "Value",
+                    "type": "text",
+                    "class": "col-sm-6"
+                }
+            ]
+        },
+        {
+            "field_name": "parameters",
+            "name": "Parameter(s)",
+            "type": "repeat",
+            "fields": [
+                {
+                    "field_name": "name",
+                    "name": "Name",
+                    "type": "text",
+                    "class": "col-sm-6"
+                },
+                {
+                    "field_name": "value",
+                    "name": "Value",
+                    "type": "text",
+                    "class": "col-sm-6"
+                }
+            ]
+        },
+        {
+            "field_name": "advances",
+            "name": "Advances Argument",
+            "helper": "Add other arguments <a href='https://github.com/request/request#requestoptions-callback' target='_blank'>here</a>",
+            "type": "repeat",
+            "fields": [
+                {
+                    "field_name": "name",
+                    "name": "Name",
+                    "type": "text",
+                    "class": "col-sm-6"
+                },
+                {
+                    "field_name": "value",
+                    "name": "Value",
+                    "type": "textarea",
+                    "class": "col-sm-6",
+                    "attributes": {
+                        "rows": 1
+                    }
+                }
+            ]
+        }
+    ],
+    "name": "Web Request",
+    "excerpts": "Use to reqest HTTP Methods: POST, GET, PUT, DELETE",
+    "categoriesSlug": [],
+    "hasAccount": false
+}
