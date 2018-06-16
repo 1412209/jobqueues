@@ -78,6 +78,7 @@ class GmailSendMail extends Job {
 			var gmail = google.gmail('v1');
 			gmail.users.messages.list({
 				auth: auth,
+				labelIds: "INBOX",
 				userId: 'me'
 			}, function(err, response) {
 				if (err){
