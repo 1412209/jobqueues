@@ -24,22 +24,23 @@ app.use(session({
 app.use(Passport.initialize());
 app.use(Passport.session());
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
-// Controller.Init(app, function(){
-// 	const httpsOptions = {
-// 		key: fs.readFileSync('./localhost-ssl/file.pem'),
-// 		cert: fs.readFileSync('./localhost-ssl/file.crt')
-// 	}
+Controller.Init(app, function(){
 
-// 	// Redirect http về https
-// 	http.createServer(function (req, res) {
-// 	    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-// 	    res.end();
-// 	}).listen(80, "127.0.0.5");
+	app.listen(3000, () => console.log('Example app listening on port 3000!'));
+	// const httpsOptions = {
+	// 	key: fs.readFileSync('./localhost-ssl/file.pem'),
+	// 	cert: fs.readFileSync('./localhost-ssl/file.crt')
+	// }
 
-// 	// Tạo server https với ip 127.0.0.5 và port 443 (port default https)
-// 	https.createServer(httpsOptions,app).listen(443, "127.0.0.5", () => {
-// 		console.log('Example app listening with https on ip 127.0.0.5 port 443!');
-// 	});
-// });
+	// // Redirect http về https
+	// http.createServer(function (req, res) {
+	//     res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+	//     res.end();
+	// }).listen(80, "127.0.0.5");
+
+	// // Tạo server https với ip 127.0.0.5 và port 443 (port default https)
+	// https.createServer(httpsOptions,app).listen(443, "127.0.0.5", () => {
+	// 	console.log('Example app listening with https on ip 127.0.0.5 port 443!');
+	// });
+});
 
