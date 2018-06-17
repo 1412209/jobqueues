@@ -21,7 +21,7 @@
     "inputAttributes": [],
     "name": "WebHooks",
     "excerpts": "Use to POST Request to execute execute Job Chain",
-    "categoriesSlug": [],
+    "categoriesSlug": ["api"],
     "hasAccount": false,
     "minIntervalTime": 999999999999999
 }

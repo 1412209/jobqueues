@@ -64,6 +64,6 @@
     ],
     "name": "Or Condition",
     "excerpts": "Check one of the conditions correctly.",
-    "categoriesSlug": [],
+    "categoriesSlug": ["condition"],
     "hasAccount": false
 }

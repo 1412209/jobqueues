@@ -21,6 +21,6 @@
     ],
     "name": "Parallel Job",
     "excerpts": "Create asynchronous and separate threads",
-    "categoriesSlug": [],
+    "categoriesSlug": ["condition"],
     "hasAccount": false
 }
