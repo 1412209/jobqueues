@@ -1,5 +1,5 @@
 {
-    "type": "condition",
+    "type": "trigger",
     "optionsAttributesName": [
         "prefix",
         "nexts"
@@ -69,6 +69,6 @@
     ],
     "name": "BitCoin",
     "excerpts": "Check bitcoin price satisfies conditions.",
-    "categoriesSlug": [],
+    "categoriesSlug": ["crawler"],
     "hasAccount": false
 }
