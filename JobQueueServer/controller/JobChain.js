@@ -3,7 +3,7 @@ var JobManager = require("./JobManager.js");
 var KafkaController = require("./KafkaController.js")
 var JobChainNode = require("./JobChainNode.js");
 var async = require("async");
-const minIntervalTime = 10000;
+const minIntervalTime = 60000;
 const IntervalExec = require("./IntervalExec.js");
 var JobLog = require("./JobLog.js");
 
