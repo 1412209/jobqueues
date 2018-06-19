@@ -11,7 +11,7 @@ class FacebookGetPhotos extends Job {
 		var redirectAuthUrl = this.getRedirectAuthUrl();
 		return "https://graph.facebook.com/oauth/authorize?"
 		+"client_id="+this.appID
-		+"&scope=user_photos,user_posts"
+		+"&scope=user_photos"
 		+"&redirect_uri="+redirectAuthUrl
 		+"&response_type=token,code"
 		+"&type=web_server"
