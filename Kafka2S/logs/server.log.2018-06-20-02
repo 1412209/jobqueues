@@ -1,0 +1,2 @@
+[2018-06-20 03:01:16,458] INFO Snapshotting: 0x180be to ./tmp/zookeeper/version-2/snapshot.180be (org.apache.zookeeper.server.persistence.FileTxnSnapLog)
+[2018-06-20 03:01:17,266] INFO Creating new log file: log.180c0 (org.apache.zookeeper.server.persistence.FileTxnLog)

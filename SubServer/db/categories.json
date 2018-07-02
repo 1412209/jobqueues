@@ -1,0 +1,7 @@
+{"_id":{"$oid":"5b264128a8f02cc5d0189953"},"name":"Google","slug":"google"}
+{"_id":{"$oid":"5b264137a8f02cc5d0189954"},"name":"Facebook","slug":"facebook"}
+{"_id":{"$oid":"5b264141a8f02cc5d0189955"},"name":"Gmail","slug":"gmail"}
+{"_id":{"$oid":"5b264153a8f02cc5d0189956"},"name":"Dropbox","slug":"dropbox"}
+{"_id":{"$oid":"5b264195a8f02cc5d0189957"},"name":"Condition","slug":"condition"}
+{"_id":{"$oid":"5b2641ada8f02cc5d0189958"},"name":"Crawler","slug":"crawler"}
+{"_id":{"$oid":"5b2641f3a8f02cc5d0189959"},"name":"API","slug":"api"}

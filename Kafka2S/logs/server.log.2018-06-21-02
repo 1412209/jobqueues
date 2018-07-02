@@ -1,0 +1,4 @@
+[2018-06-21 03:01:15,350] INFO Accepted socket connection from /198.20.69.98:58013 (org.apache.zookeeper.server.NIOServerCnxnFactory)
+[2018-06-21 03:01:15,916] INFO Processing stat command from /198.20.69.98:58013 (org.apache.zookeeper.server.NIOServerCnxn)
+[2018-06-21 03:01:15,916] INFO Stat command output (org.apache.zookeeper.server.NIOServerCnxn)
+[2018-06-21 03:01:15,917] INFO Closed socket connection for client /198.20.69.98:58013 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)

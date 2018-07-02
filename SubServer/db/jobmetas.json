@@ -1,0 +1,16 @@
+{"_id":{"$oid":"5b258faffd32d2394bc81b11"},"slug":"FacebookGetPhotos","key":"quantity_used","value":10,"__v":0}
+{"_id":{"$oid":"5b258fb2fd32d2394bc81b14"},"slug":"GmailSendMail","key":"quantity_used","value":16,"__v":0}
+{"_id":{"$oid":"5b2594126ebd7566d67402bb"},"slug":"GmailGetNewMail","key":"quantity_used","value":7,"__v":0}
+{"_id":{"$oid":"5b2594856ebd7566d67402c3"},"slug":"Schedule","key":"quantity_used","value":5,"__v":0}
+{"_id":{"$oid":"5b264256423a4f241f10fc47"},"slug":"GmailSendMail","key":"featured","value":{"$oid":"5b258fa7fd32d2394bc81b0d"},"__v":0}
+{"_id":{"$oid":"5b264257423a4f241f10fc48"},"slug":"GmailGetNewMail","key":"featured","value":{"$oid":"5b258fa7fd32d2394bc81b0d"},"__v":0}
+{"_id":{"$oid":"5b29703d44ea4e4dbdde9269"},"slug":"Parallel","key":"quantity_used","value":1,"__v":0}
+{"_id":{"$oid":"5b29704344ea4e4dbdde926c"},"slug":"DropboxUploadImage","key":"quantity_used","value":7,"__v":0}
+{"_id":{"$oid":"5b29704544ea4e4dbdde926f"},"slug":"BitCoin","key":"quantity_used","value":2,"__v":0}
+{"_id":{"$oid":"5b29704544ea4e4dbdde9270"},"slug":"BitCoin","key":"quantity_used","value":1,"__v":0}
+{"_id":{"$oid":"5b2970bd44ea4e4dbdde9272"},"slug":"AndCondition","key":"quantity_used","value":4,"__v":0}
+{"_id":{"$oid":"5b2970c744ea4e4dbdde9277"},"slug":"RealEstate","key":"quantity_used","value":4,"__v":0}
+{"_id":{"$oid":"5b30b039462bec63689d351e"},"slug":"Schedule","key":"featured","value":{"$oid":"5b25a8888ca23e7835165b5b"},"__v":0}
+{"_id":{"$oid":"5b30b03b462bec63689d351f"},"slug":"DropboxUploadImage","key":"featured","value":{"$oid":"5b25a8888ca23e7835165b5b"},"__v":0}
+{"_id":{"$oid":"5b31511d462bec63689d3525"},"slug":"WebHooks","key":"quantity_used","value":2,"__v":0}
+{"_id":{"$oid":"5b3153a0462bec63689d3527"},"slug":"WebRequest","key":"quantity_used","value":2,"__v":0}

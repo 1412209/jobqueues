@@ -1,0 +1,2 @@
+[2018-07-01 10:51:26,174] INFO Creating new log file: log.76697 (org.apache.zookeeper.server.persistence.FileTxnLog)
+[2018-07-01 10:51:26,175] INFO Snapshotting: 0x76695 to ./tmp/zookeeper/version-2/snapshot.76695 (org.apache.zookeeper.server.persistence.FileTxnSnapLog)
